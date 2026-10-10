@@ -1,0 +1,489 @@
+name: Paper network + E-106
+network:
+  supply_node: 1
+  return_node: 10
+  elevation_difference_m: 5.0
+  edges:
+  - id: 1
+    kind: pipe
+    tail: 1
+    head: 2
+    length_m: 10.0
+    diameter_in: 10.0
+  - id: 2
+    kind: pump
+    tail: 2
+    head: 3
+    option: '1'
+  - id: 3
+    kind: pipe
+    tail: 3
+    head: 4
+    length_m: 200.0
+    diameter_in: 12.0
+  - id: 4
+    kind: pipe
+    tail: 4
+    head: 5
+    length_m: 100.0
+    diameter_in: 12.0
+  - id: 5
+    kind: pipe
+    tail: 5
+    head: 6
+    length_m: 100.0
+    diameter_in: 6.0
+  - id: 6
+    kind: pipe
+    tail: 7
+    head: 8
+    length_m: 100.0
+    diameter_in: 6.0
+  - id: 7
+    kind: pipe
+    tail: 8
+    head: 9
+    length_m: 100.0
+    diameter_in: 10.0
+  - id: 8
+    kind: pipe
+    tail: 9
+    head: 10
+    length_m: 200.0
+    diameter_in: 12.0
+  - id: 9
+    kind: pipe
+    tail: 4
+    head: 11
+    length_m: 25.0
+    diameter_in: 4.0
+  - id: 10
+    kind: pipe
+    tail: 4
+    head: 12
+    length_m: 25.0
+    diameter_in: 8.0
+  - id: 11
+    kind: pipe
+    tail: 5
+    head: 13
+    length_m: 25.0
+    diameter_in: 6.0
+  - id: 12
+    kind: pipe
+    tail: 6
+    head: 14
+    length_m: 125.0
+    diameter_in: 6.0
+  - id: 13
+    kind: pipe
+    tail: 6
+    head: 15
+    length_m: 25.0
+    diameter_in: 2.0
+  - id: 14
+    kind: pipe
+    tail: 16
+    head: 9
+    length_m: 25.0
+    diameter_in: 4.0
+  - id: 15
+    kind: pipe
+    tail: 17
+    head: 9
+    length_m: 25.0
+    diameter_in: 6.0
+  - id: 16
+    kind: pipe
+    tail: 18
+    head: 8
+    length_m: 25.0
+    diameter_in: 6.0
+  - id: 17
+    kind: pipe
+    tail: 19
+    head: 7
+    length_m: 125.0
+    diameter_in: 6.0
+  - id: 18
+    kind: pipe
+    tail: 20
+    head: 7
+    length_m: 25.0
+    diameter_in: 2.0
+  - id: 19
+    kind: heat_exchanger
+    tail: 11
+    head: 16
+    tag: E-101
+  - id: 20
+    kind: heat_exchanger
+    tail: 12
+    head: 17
+    tag: E-102
+  - id: 21
+    kind: heat_exchanger
+    tail: 13
+    head: 18
+    tag: E-103
+  - id: 22
+    kind: heat_exchanger
+    tail: 14
+    head: 19
+    tag: E-104
+  - id: 23
+    kind: heat_exchanger
+    tail: 15
+    head: 20
+    tag: E-105
+  - id: 24
+    kind: pipe
+    tail: 6
+    head: 21
+    length_m: 40.0
+    diameter_in: 3.0
+  - id: 26
+    kind: heat_exchanger
+    tail: 21
+    head: 22
+    tag: E-106
+  - id: 25
+    kind: pipe
+    tail: 22
+    head: 7
+    length_m: 40.0
+    diameter_in: 3.0
+  layout:
+    '1':
+    - 0.0
+    - 0.0
+    '2':
+    - 1.0
+    - 0.0
+    '3':
+    - 2.0
+    - 0.0
+    '4':
+    - 3.5
+    - 0.0
+    '5':
+    - 5.5
+    - 0.0
+    '6':
+    - 7.5
+    - 0.0
+    '11':
+    - 3.0
+    - 1.0
+    '12':
+    - 4.0
+    - 1.0
+    '13':
+    - 5.5
+    - 1.0
+    '14':
+    - 7.0
+    - 1.0
+    '15':
+    - 8.0
+    - 1.0
+    '16':
+    - 3.0
+    - 2.0
+    '17':
+    - 4.0
+    - 2.0
+    '18':
+    - 5.5
+    - 2.0
+    '19':
+    - 7.0
+    - 2.0
+    '20':
+    - 8.0
+    - 2.0
+    '9':
+    - 3.5
+    - 3.0
+    '8':
+    - 5.5
+    - 3.0
+    '7':
+    - 7.5
+    - 3.0
+    '10':
+    - 0.0
+    - 3.0
+    '21':
+    - 9.0
+    - 1.0
+    '22':
+    - 9.0
+    - 2.0
+heat_exchangers:
+  E-101:
+    area_m2: 27.3
+    hot_flow_design_kg_s: 12.0
+    water_flow_design_kg_s: 11.8
+    hot_inlet_C: 80.0
+    hot_outlet_spec_C: 65.0
+    water_inlet_design_C: 32.0
+    water_outlet_design_C: 40.0
+    cp_hot_J_kgK: 2200.0
+    h_water_design_W_m2K: 10615.0
+    h_hot_design_W_m2K: 658.0
+    fouling_m2K_W: 0.00051
+    head_loss_design_m: 5.53
+    tube_outer_diameter_m: null
+    tube_inner_diameter_m: null
+    wall_conductivity_W_mK: null
+    penalty_factor_USD_per_C_y: null
+    hot_outlet_min_C: null
+    hot_outlet_max_C: null
+    head_loss_exponent: null
+    water_film_exponent: null
+    hot_film_exponent: null
+  E-102:
+    area_m2: 76.7
+    hot_flow_design_kg_s: 12.0
+    water_flow_design_kg_s: 28.7
+    hot_inlet_C: 120.0
+    hot_outlet_spec_C: 80.0
+    water_inlet_design_C: 32.0
+    water_outlet_design_C: 40.0
+    cp_hot_J_kgK: 2000.0
+    h_water_design_W_m2K: 10651.0
+    h_hot_design_W_m2K: 266.0
+    fouling_m2K_W: 0.00076
+    head_loss_design_m: 6.35
+    tube_outer_diameter_m: null
+    tube_inner_diameter_m: null
+    wall_conductivity_W_mK: null
+    penalty_factor_USD_per_C_y: null
+    hot_outlet_min_C: null
+    hot_outlet_max_C: null
+    head_loss_exponent: null
+    water_film_exponent: null
+    hot_film_exponent: null
+  E-103:
+    area_m2: 133.6
+    hot_flow_design_kg_s: 10.5
+    water_flow_design_kg_s: 35.6
+    hot_inlet_C: 80.0
+    hot_outlet_spec_C: 40.0
+    water_inlet_design_C: 32.0
+    water_outlet_design_C: 40.0
+    cp_hot_J_kgK: 2840.0
+    h_water_design_W_m2K: 8864.0
+    h_hot_design_W_m2K: 923.0
+    fouling_m2K_W: 0.00048
+    head_loss_design_m: 4.82
+    tube_outer_diameter_m: null
+    tube_inner_diameter_m: null
+    wall_conductivity_W_mK: null
+    penalty_factor_USD_per_C_y: null
+    hot_outlet_min_C: null
+    hot_outlet_max_C: null
+    head_loss_exponent: null
+    water_film_exponent: null
+    hot_film_exponent: null
+  E-104:
+    area_m2: 109.5
+    hot_flow_design_kg_s: 8.5
+    water_flow_design_kg_s: 15.6
+    hot_inlet_C: 69.0
+    hot_outlet_spec_C: 41.0
+    water_inlet_design_C: 32.0
+    water_outlet_design_C: 40.0
+    cp_hot_J_kgK: 2200.0
+    h_water_design_W_m2K: 6187.0
+    h_hot_design_W_m2K: 450.0
+    fouling_m2K_W: 0.00049
+    head_loss_design_m: 2.97
+    tube_outer_diameter_m: null
+    tube_inner_diameter_m: null
+    wall_conductivity_W_mK: null
+    penalty_factor_USD_per_C_y: null
+    hot_outlet_min_C: null
+    hot_outlet_max_C: null
+    head_loss_exponent: null
+    water_film_exponent: null
+    hot_film_exponent: null
+  E-105:
+    area_m2: 47.4
+    hot_flow_design_kg_s: 1.7
+    water_flow_design_kg_s: 3.1
+    hot_inlet_C: 69.0
+    hot_outlet_spec_C: 41.0
+    water_inlet_design_C: 32.0
+    water_outlet_design_C: 40.0
+    cp_hot_J_kgK: 2200.0
+    h_water_design_W_m2K: 3645.0
+    h_hot_design_W_m2K: 216.0
+    fouling_m2K_W: 0.00049
+    head_loss_design_m: 1.2
+    tube_outer_diameter_m: null
+    tube_inner_diameter_m: null
+    wall_conductivity_W_mK: null
+    penalty_factor_USD_per_C_y: null
+    hot_outlet_min_C: null
+    hot_outlet_max_C: null
+    head_loss_exponent: null
+    water_film_exponent: null
+    hot_film_exponent: null
+  E-106:
+    area_m2: 35.0
+    hot_flow_design_kg_s: 4.0
+    water_flow_design_kg_s: 8.0
+    hot_inlet_C: 75.0
+    hot_outlet_spec_C: 45.0
+    water_inlet_design_C: 32.0
+    water_outlet_design_C: 40.0
+    cp_hot_J_kgK: 2300.0
+    h_water_design_W_m2K: 5200.0
+    h_hot_design_W_m2K: 400.0
+    fouling_m2K_W: 0.0005
+    head_loss_design_m: 2.5
+    tube_outer_diameter_m: null
+    tube_inner_diameter_m: null
+    wall_conductivity_W_mK: null
+    penalty_factor_USD_per_C_y: 20000.0
+    hot_outlet_min_C: null
+    hot_outlet_max_C: null
+    head_loss_exponent: null
+    water_film_exponent: null
+    hot_film_exponent: null
+heat_exchanger_defaults:
+  tube_outer_diameter_m: 0.0207
+  tube_inner_diameter_m: 0.01905
+  wall_conductivity_W_mK: 50.0
+  penalty_factor_USD_per_C_y: 12500.0
+  hot_outlet_min_C: 20.0
+  hot_outlet_max_C: 100.0
+  head_loss_exponent: 1.852
+  water_film_exponent: 0.8
+  hot_film_exponent: 0.6
+pipes:
+  hazen_williams_c: 120.0
+  cost_c1: 7.0386
+  cost_m: 1.4393
+  v_max_m_s: 3.7
+  v_min_m_s: 0.1
+  q_min_m3_s: 1.0e-05
+  q_max_m3_s: 100.0
+  catalogue:
+  - nominal_in: 0.5
+    inner_m: 0.0158
+  - nominal_in: 0.75
+    inner_m: 0.021
+  - nominal_in: 1.0
+    inner_m: 0.0266
+  - nominal_in: 1.25
+    inner_m: 0.0351
+  - nominal_in: 1.5
+    inner_m: 0.0409
+  - nominal_in: 2.0
+    inner_m: 0.0525
+  - nominal_in: 2.5
+    inner_m: 0.0627
+  - nominal_in: 3.0
+    inner_m: 0.0779
+  - nominal_in: 3.5
+    inner_m: 0.0901
+  - nominal_in: 4.0
+    inner_m: 0.1023
+  - nominal_in: 5.0
+    inner_m: 0.1282
+  - nominal_in: 6.0
+    inner_m: 0.1541
+  - nominal_in: 8.0
+    inner_m: 0.2027
+  - nominal_in: 10.0
+    inner_m: 0.2545
+  - nominal_in: 12.0
+    inner_m: 0.3033
+  - nominal_in: 14.0
+    inner_m: 0.3333
+  - nominal_in: 16.0
+    inner_m: 0.381
+  - nominal_in: 18.0
+    inner_m: 0.4287
+  - nominal_in: 20.0
+    inner_m: 0.4778
+  - nominal_in: 24.0
+    inner_m: 0.5746
+pumps:
+  efficiency: 0.6
+  design_flow_m3_s: 0.095276382
+  cost_FI: 2.8
+  cost_Fms: 1.3
+  cost_Fm: 1.35
+  cost_b:
+  - 5.1029
+  - -1.2217
+  - 0.0771
+  options:
+    '1':
+      coefficients:
+      - 31.5
+      - -135.0
+      - -415.6
+    '2':
+      coefficients:
+      - 37.8
+      - -162.0
+      - -498.7
+    '3':
+      coefficients:
+      - 42.0
+      - -180.0
+      - -554.1
+    '4':
+      coefficients:
+      - 46.2
+      - -198.0
+      - -609.5
+cooling_tower:
+  wet_bulb_C: 26.5
+  max_feed_temperature_C: 45.0
+  air_flow_kg_s: 70.0
+  packing_height_m: 2.0
+  C_un: 0.54
+  n: 0.66
+  atmospheric_air_enthalpy_J_kg: 71000.0
+  saturation_enthalpy:
+    a: -6.38887667
+    b: 0.86581791
+    c: 15.7153617
+    d: 0.05439778
+  quadrature_points:
+  - 0.1
+  - 0.4
+  - 0.6
+  - 0.7
+  merkel_regularization_J_kg: 1.0
+  min_enthalpy_driving_force_J_kg: 100.0
+water:
+  density_kg_m3: 995.0
+  cp_J_kgK: 4187.0
+economics:
+  operating_hours_per_year: 8760.0
+  energy_cost_USD_kWh: 0.12
+  interest_rate: 0.12
+  project_years: 20
+  gravity_m_s2: 9.81
+scenarios:
+  hot_flow_increase_factor: 1.2
+  penalty_cases:
+    case1: 12500.0
+    case2: 40000.0
+  budget_cases:
+    1A: 2625.0
+    1B: 4125.0
+    1C: 5250.0
+  budget_sweep:
+    max_USD_y: 7500.0
+    steps: 40
+  penalty_sweep:
+    max_factor: 5.0
+    steps: 50

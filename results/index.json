@@ -1,0 +1,90 @@
+{
+ "initial": {
+  "updated_at": "2026-10-10T03:34:59.865156+00:00",
+  "label": "initial",
+  "termination": "optimal",
+  "objective": 20160.19256441865,
+  "gap": null,
+  "time_s": 0.1796545410034014
+ },
+ "current": {
+  "updated_at": "2026-10-10T03:35:00.020106+00:00",
+  "label": "current",
+  "termination": "optimal",
+  "objective": 93870.34554058657,
+  "gap": null,
+  "time_s": 0.1443483750044834
+ },
+ "no_budget": {
+  "updated_at": "2026-10-10T03:35:00.262989+00:00",
+  "label": "no_budget",
+  "termination": "optimal",
+  "objective": 88869.45931172569,
+  "gap": null,
+  "time_s": 0.20154079201165587
+ },
+ "case1": {
+  "updated_at": "2026-10-10T03:35:05.720230+00:00",
+  "label": "case1",
+  "termination": "optimal",
+  "objective": 84590.67269050745,
+  "gap": null,
+  "time_s": 5.446087541989982
+ },
+ "case2": {
+  "updated_at": "2026-10-10T03:35:10.493808+00:00",
+  "label": "case2",
+  "termination": "optimal",
+  "objective": 189760.88477594822,
+  "gap": null,
+  "time_s": 4.762116125013563
+ },
+ "budget_1A": {
+  "updated_at": "2026-10-10T04:03:45.690658+00:00",
+  "label": "budget_1A",
+  "termination": "optimal",
+  "objective": 86933.82637652688,
+  "gap": null,
+  "time_s": 51.15798641699075
+ },
+ "budget_1B": {
+  "updated_at": "2026-10-10T04:04:26.163212+00:00",
+  "label": "budget_1B",
+  "termination": "optimal",
+  "objective": 85030.3176658914,
+  "gap": null,
+  "time_s": 40.44470266599092
+ },
+ "budget_1C": {
+  "updated_at": "2026-10-10T04:04:40.341186+00:00",
+  "label": "budget_1C",
+  "termination": "optimal",
+  "objective": 84765.1244804775,
+  "gap": null,
+  "time_s": 14.119015584001318
+ },
+ "budget_sweep": {
+  "updated_at": "2026-10-10T04:25:34.622251+00:00",
+  "count": 41
+ },
+ "penalty_sweep": {
+  "updated_at": "2026-10-10T04:32:06.419470+00:00",
+  "count": 51
+ },
+ "desired_flows": {
+  "updated_at": "2026-10-10T03:52:49.631033+00:00",
+  "label": "desired_flows",
+  "termination": "optimal",
+  "objective": 1.1000000015494647e-06,
+  "gap": null,
+  "time_s": 0.009673124994151294
+ },
+ "hydraulic_only": {
+  "updated_at": "2026-10-10T04:12:22.719111+00:00",
+  "label": "hydraulic_only",
+  "termination": "optimal",
+  "objective": 523272.47621661494,
+  "gap": null,
+  "time_s": 214.66903787500632
+ }
+}

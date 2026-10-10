@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the original paper and this repository."
+title: "coolingnet: optimization of cooling water system hydraulic debottlenecking (Python reimplementation)"
+type: software
+authors:
+  - family-names: Souza
+    given-names: Jaime N. M.
+license: MIT
+references:
+  - type: article
+    title: "Optimization of cooling water system hydraulic debottlenecking"
+    authors:
+      - family-names: Souza
+        given-names: Jaime N. M.
+      - family-names: Levy
+        given-names: Ana L. L.
+      - family-names: Costa
+        given-names: André L. H.
+    journal: "Applied Thermal Engineering"
+    volume: 128
+    year: 2018
+    start: 1531
+    end: 1542
+    doi: 10.1016/j.applthermaleng.2017.09.089

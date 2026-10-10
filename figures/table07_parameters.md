@@ -1,0 +1,23 @@
+| Parameter                                         | Value              |
+|:--------------------------------------------------|:-------------------|
+| Cooling water density (kg/m3)                     | 995.0              |
+| Cooling water heat capacity (J/kg C)              | 4187.0             |
+| Maximum flow velocity (m/s)                       | 3.7                |
+| Minimum flow velocity (m/s)                       | 0.1                |
+| Hazen-Williams parameter c                        | 120.0              |
+| Pipe cost parameters C1 / m                       | 7.0386 / 1.4393    |
+| Pump efficiency                                   | 0.6                |
+| Number of operating hours per year (h/y)          | 8760.0             |
+| Energy cost (USD/kWh)                             | 0.1                |
+| Interest rate                                     | 0.12               |
+| Project horizon (y)                               | 20                 |
+| Elevation difference of the tower (m)             | 5.0                |
+| Maximum temperature of the cooling water feed (C) | 45.0               |
+| Wet bulb temperature (C)                          | 26.5               |
+| Parameter C_un - Eq. (37)                         | 0.54               |
+| Parameter n - Eq. (37)                            | 0.66               |
+| Packing height (m)                                | 2.0                |
+| Air mass flow rate (kg/s)                         | 63.2               |
+| Penalty weight (kUSD/y C)                         | 12.5               |
+| Atmospheric air enthalpy (J/kg)                   | 71000.0            |
+| Merkel quadrature abscissae                       | 0.1, 0.4, 0.6, 0.7 |

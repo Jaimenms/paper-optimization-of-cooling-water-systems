@@ -1,0 +1,6 @@
+Heat exchanger,Area (m2),Film coefficient tube/shell (W/m2 C),Total fouling factor (1e-4 m2 C/W),Design head loss (m)
+E-101,27.3,10615/658,5.1,5.53
+E-102,76.7,10651/266,7.6,6.35
+E-103,133.6,8864/923,4.8,4.82
+E-104,109.5,6187/450,4.9,2.97
+E-105,47.4,3645/216,4.9,1.2
