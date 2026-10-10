@@ -92,10 +92,15 @@ discrepancies between the paper text and the original GAMS code, and one physica
 to the cooling tower model (positive enthalpy driving force, which removes a spurious root of the
 regularized Merkel integral), are documented in [`docs/model.md`](docs/model.md).
 
-## Layout
+## Documents
 
-See [`docs/architecture.md`](docs/architecture.md) and [`docs/model.md`](docs/model.md)
-(equation ↔ code map, solution strategy).
+* [`docs/model.md`](docs/model.md) — equation ↔ code map, solution strategy.
+* [`docs/architecture.md`](docs/architecture.md) — package layout and design principles.
+* [`docs/achados.md`](docs/achados.md) — the three findings of the port (in Portuguese).
+* [`docs/errata.md`](docs/errata.md) — errata of the paper with location and quantified impact
+  (in Portuguese).
+
+## Layout
 
 ```
 src/coolingnet/   package (config, network, physics, economics, simulation, optimization, workflow, reporting, cli)
