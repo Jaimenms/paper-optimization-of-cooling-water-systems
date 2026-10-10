@@ -9,4 +9,12 @@ from coolingnet.network import Network, build_network
 
 __version__ = "0.1.0"
 
-__all__ = ["CaseStudy", "Network", "__version__", "build_network", "dump_case", "load_case", "paper_case"]
+__all__ = [
+    "CaseStudy",
+    "Network",
+    "__version__",
+    "build_network",
+    "dump_case",
+    "load_case",
+    "paper_case",
+]

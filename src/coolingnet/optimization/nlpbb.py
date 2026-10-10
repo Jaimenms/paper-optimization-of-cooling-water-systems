@@ -88,13 +88,22 @@ class NlpBranchAndBound:
         self.cutoff = cutoff
         opts = {**IPOPT_DEFAULTS, "print_level": 0, "max_iter": max_node_iter}
         opts.update(ipopt_options or {})
-        self.solver = ca.nlpsol("node", "ipopt", {"x": self.prob.x, "f": self.prob.f, "g": self.prob.g}, {"ipopt": opts, "print_time": False, "error_on_fail": False})
+        self.solver = ca.nlpsol(
+            "node",
+            "ipopt",
+            {"x": self.prob.x, "f": self.prob.f, "g": self.prob.g},
+            {"ipopt": opts, "print_time": False, "error_on_fail": False},
+        )
         self.g_fun = ca.Function("g", [self.prob.x], [self.prob.g])
         self.f_fun = ca.Function("f", [self.prob.x], [self.prob.f])
         self.lbg, self.ubg = np.array(self.prob.lbg), np.array(self.prob.ubg)
         self.discrete = np.array(self.prob.discrete, dtype=bool)
         self.groups = self._selection_groups()
-        self.valve_idx = [i for i, v in enumerate(self.prob.variables) if v.parent_component().local_name.endswith("lvalve")]
+        self.valve_idx = [
+            i
+            for i, v in enumerate(self.prob.variables)
+            if v.parent_component().local_name.endswith("lvalve")
+        ]
         self.multistart = multistart
         self.local_search_steps = local_search_steps
         self.rng = np.random.default_rng(seed)
@@ -125,12 +134,25 @@ class NlpBranchAndBound:
         g = np.asarray(self.g_fun(x)).ravel()
         viol = float(np.max(np.maximum(self.lbg - g, 0.0).max(initial=0.0) if g.size else 0.0))
         viol = max(viol, float(np.maximum(g - self.ubg, 0.0).max(initial=0.0)) if g.size else 0.0)
-        viol = max(viol, float(np.maximum(lbx - x, 0.0).max(initial=0.0)), float(np.maximum(x - ubx, 0.0).max(initial=0.0)))
-        ok = bool(stats.get("success")) or (str(stats.get("return_status")) in ("Solved_To_Acceptable_Level",))
-        return ok and viol <= self.feasibility_tol, float(res["f"]), x, str(stats.get("return_status"))
+        viol = max(
+            viol,
+            float(np.maximum(lbx - x, 0.0).max(initial=0.0)),
+            float(np.maximum(x - ubx, 0.0).max(initial=0.0)),
+        )
+        ok = bool(stats.get("success")) or (
+            str(stats.get("return_status")) in ("Solved_To_Acceptable_Level",)
+        )
+        return (
+            ok and viol <= self.feasibility_tol,
+            float(res["f"]),
+            x,
+            str(stats.get("return_status")),
+        )
 
     def _is_integral(self, x) -> bool:
-        return bool(np.all(np.abs(x[self.discrete] - np.round(x[self.discrete])) <= self.integrality_tol))
+        return bool(
+            np.all(np.abs(x[self.discrete] - np.round(x[self.discrete])) <= self.integrality_tol)
+        )
 
     def _pick_group(self, x) -> tuple[list[int], int] | None:
         """Most fractional one-hot group and the SOS1 split position."""
@@ -188,14 +210,34 @@ class NlpBranchAndBound:
         x0 = np.array(self.prob.x0, dtype=float)
         ok, f, x, status = self._polish(x0, lbx0, ubx0, assignment=np.round(x0[self.discrete]))
         if not ok:
-            return BBResult("infeasible", None, None, None, 0, self.nlps, time.perf_counter() - t0, f"NLP failed: {status}")
-        return BBResult("optimal", f, f, x, 0, self.nlps, time.perf_counter() - t0, f"multi-start NLP ({self.nlps} solves)")
+            return BBResult(
+                "infeasible",
+                None,
+                None,
+                None,
+                0,
+                self.nlps,
+                time.perf_counter() - t0,
+                f"NLP failed: {status}",
+            )
+        return BBResult(
+            "optimal",
+            f,
+            f,
+            x,
+            0,
+            self.nlps,
+            time.perf_counter() - t0,
+            f"multi-start NLP ({self.nlps} solves)",
+        )
 
     # ------------------------------------------------------------ local search
     def _assignment_of(self, x) -> np.ndarray:
         return np.round(x[self.discrete])
 
-    def local_search(self, x: np.ndarray, f: float, lbx, ubx, t_end: float) -> tuple[np.ndarray, float, int]:
+    def local_search(
+        self, x: np.ndarray, f: float, lbx, ubx, t_end: float
+    ) -> tuple[np.ndarray, float, int]:
         """First-improvement search over neighbouring designs (adjacent catalogue entries)."""
         disc_pos = {i: k for k, i in enumerate(np.flatnonzero(self.discrete))}
         best_x, best_f, moves = x.copy(), f, 0
@@ -210,7 +252,11 @@ class NlpBranchAndBound:
                 if len(sel) != 1:
                     continue
                 k0 = sel[0]
-                candidates = [k0 + d for d in range(-self.local_search_steps, self.local_search_steps + 1) if d != 0 and 0 <= k0 + d < len(g)]
+                candidates = [
+                    k0 + d
+                    for d in range(-self.local_search_steps, self.local_search_steps + 1)
+                    if d != 0 and 0 <= k0 + d < len(g)
+                ]
                 if len(g) <= 6:  # small groups (pump options): try every alternative
                     candidates = [k for k in range(len(g)) if k != k0]
                 for k in candidates:
@@ -246,7 +292,16 @@ class NlpBranchAndBound:
                 mid = np.where(np.isfinite(lbx0) & np.isfinite(ubx0), 0.5 * (lbx0 + ubx0), x_root)
             ok, f, x, status = self._solve_nlp(lbx0, ubx0, mid)
         if not ok:
-            return BBResult("infeasible", None, None, None, 1, self.nlps, time.perf_counter() - t0, f"root NLP failed: {status}")
+            return BBResult(
+                "infeasible",
+                None,
+                None,
+                None,
+                1,
+                self.nlps,
+                time.perf_counter() - t0,
+                f"root NLP failed: {status}",
+            )
         root_x = x.copy()
         self.root_x = root_x
         heap: list[_Node] = [_Node(f, next(seq), lbx0, ubx0, x, 0)]
@@ -262,7 +317,9 @@ class NlpBranchAndBound:
                 break
             node = heapq.heappop(heap)
             best_bound = node.bound
-            if incumbent_f < math.inf and node.bound >= incumbent_f - max(self.abs_gap, self.rel_gap * abs(incumbent_f)):
+            if incumbent_f < math.inf and node.bound >= incumbent_f - max(
+                self.abs_gap, self.rel_gap * abs(incumbent_f)
+            ):
                 heap.clear()  # best-first: every remaining node is at least as bad
                 break
             nodes += 1
@@ -286,7 +343,14 @@ class NlpBranchAndBound:
                 if okp and fp < incumbent_f:
                     incumbent_f, incumbent_x = fp, xp
                     if self.verbose:
-                        log.info("node %d depth %d: new incumbent %.6g (nlps=%d, open=%d)", nodes, node.depth, fp, self.nlps, len(heap))
+                        log.info(
+                            "node %d depth %d: new incumbent %.6g (nlps=%d, open=%d)",
+                            nodes,
+                            node.depth,
+                            fp,
+                            self.nlps,
+                            len(heap),
+                        )
                 continue
             pick = self._pick_group(x)
             if pick is None:
@@ -300,10 +364,19 @@ class NlpBranchAndBound:
                     lb[i] = 0.0
                 heapq.heappush(heap, _Node(f, next(seq), lb, ub, x, node.depth + 1))
             if self.verbose and nodes % 25 == 0:
-                log.info("nodes=%d open=%d nlps=%d bound=%.6g incumbent=%.6g", nodes, len(heap), self.nlps, best_bound, incumbent_f)
+                log.info(
+                    "nodes=%d open=%d nlps=%d bound=%.6g incumbent=%.6g",
+                    nodes,
+                    len(heap),
+                    self.nlps,
+                    best_bound,
+                    incumbent_f,
+                )
         # The starting point carries a design (existing network or warm start): always evaluate it,
         # so that the result is never worse than a known feasible design.
-        ok0, f0, x0p, _ = self._polish(x_root, lbx0, ubx0, assignment=np.round(x_root[self.discrete]))
+        ok0, f0, x0p, _ = self._polish(
+            x_root, lbx0, ubx0, assignment=np.round(x_root[self.discrete])
+        )
         note = message or "tree exhausted / gap closed"
         if ok0 and f0 < incumbent_f - max(self.abs_gap, 1e-9):
             if incumbent_x is not None:
@@ -314,15 +387,28 @@ class NlpBranchAndBound:
         if incumbent_x is None:
             elapsed = time.perf_counter() - t0
             status = "infeasible" if not message else "error"
-            return BBResult(status, None, best_bound, None, nodes, self.nlps, elapsed, message or "no integer feasible point found")
+            return BBResult(
+                status,
+                None,
+                best_bound,
+                None,
+                nodes,
+                self.nlps,
+                elapsed,
+                message or "no integer feasible point found",
+            )
         if self.local_search_steps > 0:
             f_before = incumbent_f
-            incumbent_x, incumbent_f, moves = self.local_search(incumbent_x, incumbent_f, lbx0, ubx0, t0 + self.time_limit_s)
+            incumbent_x, incumbent_f, moves = self.local_search(
+                incumbent_x, incumbent_f, lbx0, ubx0, t0 + self.time_limit_s
+            )
             if moves:
                 note += f"; local search: {moves} improving move(s), {f_before:.6g} -> {incumbent_f:.6g}"
         elapsed = time.perf_counter() - t0
         status = "feasible" if message else "optimal"
-        return BBResult(status, incumbent_f, best_bound, incumbent_x, nodes, self.nlps, elapsed, note)
+        return BBResult(
+            status, incumbent_f, best_bound, incumbent_x, nodes, self.nlps, elapsed, note
+        )
 
     def load(self, x: np.ndarray) -> None:
         for v, val, d in zip(self.prob.variables, x, self.discrete, strict=True):

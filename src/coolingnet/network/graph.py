@@ -113,7 +113,9 @@ def _incidence_matrix(nodes: list[NodeId], edges: list[Edge]) -> np.ndarray:
     return m
 
 
-def _unique_edge_path(g: nx.MultiDiGraph, source: NodeId, target: NodeId, what: str) -> list[EdgeId]:
+def _unique_edge_path(
+    g: nx.MultiDiGraph, source: NodeId, target: NodeId, what: str
+) -> list[EdgeId]:
     if source == target:
         return []
     paths = list(nx.all_simple_edge_paths(g, source, target))
@@ -156,7 +158,9 @@ def build_network(config: NetworkConfig) -> Network:
         downstream = _unique_edge_path(g, he.head, config.return_node, f"downstream of {he.tag}")
         path = (*upstream, he.id, *downstream)
         for eid in path:
-            if isinstance(config_edge := edges[[e.id for e in edges].index(eid)], HeatExchangerEdge):
+            if isinstance(
+                config_edge := edges[[e.id for e in edges].index(eid)], HeatExchangerEdge
+            ):
                 if config_edge.id != he.id:
                     raise NetworkStructureError(
                         f"circuit of {he.tag} passes through {config_edge.tag}: "

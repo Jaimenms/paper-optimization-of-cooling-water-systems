@@ -19,53 +19,126 @@ from coolingnet.simulation.fixed_design import simulate_design
 log = logging.getLogger(__name__)
 
 
-def _run(case: CaseStudy, spec: ProblemSpec, settings: SolverSettings | None, network: Network | None, warm_start: Solution | None = None) -> Solution:
+def _run(
+    case: CaseStudy,
+    spec: ProblemSpec,
+    settings: SolverSettings | None,
+    network: Network | None,
+    warm_start: Solution | None = None,
+) -> Solution:
     """Build, initialize and solve one problem; robust to solver failures when a warm start exists."""
     net = network or build_network(case.network)
     settings = settings or SolverSettings()
     m = build_model(case, spec, net)
     # interior starting point: exact state of the existing design (NumPy simulator)
-    sim = simulate_design(case, Design.from_case(case), hot_flow_factor=spec.hot_flow_factor, tower_model=spec.tower_model, network=net, penalty_factor=spec.penalty_factor)
+    sim = simulate_design(
+        case,
+        Design.from_case(case),
+        hot_flow_factor=spec.hot_flow_factor,
+        tower_model=spec.tower_model,
+        network=net,
+        penalty_factor=spec.penalty_factor,
+    )
     initialize_from_simulation(m, sim)
     incumbent = None
     if warm_start is not None:
         load_warm_start(m, warm_start)
         incumbent = evaluate_design_under_spec(case, spec, warm_start, net)
-        if incumbent is not None and settings.name == "bonmin" and settings.cutoff is None and spec.objective == "total_cost":
+        if (
+            incumbent is not None
+            and settings.name == "bonmin"
+            and settings.cutoff is None
+            and spec.objective == "total_cost"
+        ):
             settings = replace(settings, cutoff=incumbent[1] * (1.0 + 1e-4) + 1.0)
-    if incumbent is None and spec.hydraulics and spec.objective == "total_cost" and spec.design_free:
+    if (
+        incumbent is None
+        and spec.hydraulics
+        and spec.objective == "total_cost"
+        and spec.design_free
+    ):
         # the existing design with open valves is always feasible for a cost minimization
         existing = spec.existing_design or Design.from_case(case)
         if sim.converged:
             incumbent = (existing, capital_cost(case, existing, existing) + sim.total_cost_USD_y)
-    isolate = settings.isolate if settings.isolate is not None else (settings.name == "bonmin" and spec.design_free and spec.hydraulics)
+    isolate = (
+        settings.isolate
+        if settings.isolate is not None
+        else (settings.name == "bonmin" and spec.design_free and spec.hydraulics)
+    )
     if isolate:
         from coolingnet.optimization.casadi_bridge import BONMIN_FALLBACK
         from coolingnet.optimization.isolation import solve_in_subprocess
 
         child = solve_in_subprocess(case, spec, settings, warm_start)
         if child is None:
-            log.warning("%s: retrying in a new process with the conservative Bonmin settings", spec.label)
-            child = solve_in_subprocess(case, spec, replace(settings, options={**BONMIN_FALLBACK, **settings.options}), warm_start)
+            log.warning(
+                "%s: retrying in a new process with the conservative Bonmin settings", spec.label
+            )
+            child = solve_in_subprocess(
+                case,
+                spec,
+                replace(settings, options={**BONMIN_FALLBACK, **settings.options}),
+                warm_start,
+            )
         if child is not None and (child.ok or incumbent is None):
-            log.info("%s: %s obj=%s t=%.1fs", spec.label, child.report["termination"], child.costs.get("fob"), child.report["time_s"])
+            log.info(
+                "%s: %s obj=%s t=%.1fs",
+                spec.label,
+                child.report["termination"],
+                child.costs.get("fob"),
+                child.report["time_s"],
+            )
             return child
-        report = SolveReport(solver=f"{settings.name} (casadi, subprocess)", status="crashed" if child is None else child.report["status"], termination="error", objective=None, bound=None, gap=None, time_s=0.0, message="solver process crashed" if child is None else child.report.get("message", ""))
+        report = SolveReport(
+            solver=f"{settings.name} (casadi, subprocess)",
+            status="crashed" if child is None else child.report["status"],
+            termination="error",
+            objective=None,
+            bound=None,
+            gap=None,
+            time_s=0.0,
+            message="solver process crashed" if child is None else child.report.get("message", ""),
+        )
     else:
         report = solve_model(m, settings)
     if not report.ok and incumbent is not None:
         # the warm-start design is feasible: keep it and re-optimize only the valves (NLP)
-        log.warning("%s: solver returned %s (%s); falling back to the warm-start design", spec.label, report.termination, report.message)
-        fallback_spec = spec.with_(design_free=False, existing_design=spec.existing_design or Design.from_case(case))
+        log.warning(
+            "%s: solver returned %s (%s); falling back to the warm-start design",
+            spec.label,
+            report.termination,
+            report.message,
+        )
+        fallback_spec = spec.with_(
+            design_free=False, existing_design=spec.existing_design or Design.from_case(case)
+        )
         m = build_model(case, fallback_spec, net)
         _fix_design(m, incumbent[0])
-        initialize_from_simulation(m, simulate_design(case, incumbent[0], hot_flow_factor=spec.hot_flow_factor, tower_model=spec.tower_model, network=net, penalty_factor=spec.penalty_factor))
+        initialize_from_simulation(
+            m,
+            simulate_design(
+                case,
+                incumbent[0],
+                hot_flow_factor=spec.hot_flow_factor,
+                tower_model=spec.tower_model,
+                network=net,
+                penalty_factor=spec.penalty_factor,
+            ),
+        )
         fb_report = solve_model(m, replace(settings, name="ipopt", cutoff=None))
         fb_report.message = f"fallback to warm-start design after '{report.termination}': {report.message}; {fb_report.message}"
         fb_report.termination = "feasible" if fb_report.ok else fb_report.termination
         report = fb_report
     sol = Solution.from_model(m, report, spec.label)
-    log.info("%s: %s obj=%s gap=%s t=%.1fs", spec.label, report.termination, report.objective, report.gap, report.time_s)
+    log.info(
+        "%s: %s obj=%s gap=%s t=%.1fs",
+        spec.label,
+        report.termination,
+        report.objective,
+        report.gap,
+        report.time_s,
+    )
     return sol
 
 
@@ -73,13 +146,17 @@ def _fix_design(m: pyo.ConcreteModel, design: Design) -> None:
     dnom = m.params["dnom"]
     for p in m.network.pipes:
         for n in m.N:
-            m.y_pi[p.id, n].fix(1.0 if abs(dnom[n] - design.pipe_diameters_in[p.id]) < 1e-9 else 0.0)
+            m.y_pi[p.id, n].fix(
+                1.0 if abs(dnom[n] - design.pipe_diameters_in[p.id]) < 1e-9 else 0.0
+            )
     for u in m.network.pumps:
         for s_ in m.S:
             m.y_pu[u.id, s_].fix(1.0 if s_ == design.pump_options[u.id] else 0.0)
 
 
-def evaluate_design_under_spec(case: CaseStudy, spec: ProblemSpec, previous: Solution, network: Network | None = None) -> tuple[Design, float] | None:
+def evaluate_design_under_spec(
+    case: CaseStudy, spec: ProblemSpec, previous: Solution, network: Network | None = None
+) -> tuple[Design, float] | None:
     """Total cost of a previous solution's design + valves under `spec`, or None if infeasible.
 
     Used to derive a valid cutoff for the branch-and-bound and as a safety net.
@@ -89,13 +166,23 @@ def evaluate_design_under_spec(case: CaseStudy, spec: ProblemSpec, previous: Sol
     net = network or build_network(case.network)
     try:
         design = Design(
-            pipe_diameters_in={p.id: previous.design["pipe_diameters_in"][str(p.id)] for p in net.pipes},
+            pipe_diameters_in={
+                p.id: previous.design["pipe_diameters_in"][str(p.id)] for p in net.pipes
+            },
             pump_options={u.id: previous.design["pump_options"][str(u.id)] for u in net.pumps},
         )
     except KeyError:
         return None
     valves = {c["circuit"]: max(0.0, c["valve_head_loss_m"]) for c in previous.circuits}
-    sim = simulate_design(case, design, valve_head_losses_m=valves, hot_flow_factor=spec.hot_flow_factor, tower_model=spec.tower_model, network=net, penalty_factor=spec.penalty_factor)
+    sim = simulate_design(
+        case,
+        design,
+        valve_head_losses_m=valves,
+        hot_flow_factor=spec.hot_flow_factor,
+        tower_model=spec.tower_model,
+        network=net,
+        penalty_factor=spec.penalty_factor,
+    )
     if not sim.converged:
         return None
     pipes = case.pipes
@@ -124,7 +211,15 @@ def capital_cost(case: CaseStudy, design: Design, existing: Design) -> float:
     for u in case.network.pumps:
         opt = design.pump_options[u.id]
         if opt != existing.pump_options[u.id]:
-            total += pump_capital_cost(pumps.options[opt].coefficients, pumps.design_flow_m3_s, pumps.cost_FI, pumps.cost_Fms, pumps.cost_Fm, pumps.cost_b, r).annualized_cost_usd_y
+            total += pump_capital_cost(
+                pumps.options[opt].coefficients,
+                pumps.design_flow_m3_s,
+                pumps.cost_FI,
+                pumps.cost_Fms,
+                pumps.cost_Fm,
+                pumps.cost_b,
+                r,
+            ).annualized_cost_usd_y
     return total
 
 
@@ -250,7 +345,14 @@ def budget_sweep(
     previous = warm_start
     for b in budgets:
         sol = optimize_debottlenecking(
-            case, budget=float(b), penalty_factor=penalty_factor, settings=settings, network=net, warm_start=previous, label=f"budget_{b:g}", **spec_overrides
+            case,
+            budget=float(b),
+            penalty_factor=penalty_factor,
+            settings=settings,
+            network=net,
+            warm_start=previous,
+            label=f"budget_{b:g}",
+            **spec_overrides,
         )
         out.append(sol)
         if sol.ok:
@@ -277,7 +379,14 @@ def penalty_sweep(
     previous = warm_start
     for pen in penalty_factors:
         sol = optimize_debottlenecking(
-            case, budget=budget, penalty_factor=float(pen), settings=settings, network=net, warm_start=previous, label=f"penalty_{pen:g}", **spec_overrides
+            case,
+            budget=budget,
+            penalty_factor=float(pen),
+            settings=settings,
+            network=net,
+            warm_start=previous,
+            label=f"penalty_{pen:g}",
+            **spec_overrides,
         )
         out.append(sol)
         if sol.ok:

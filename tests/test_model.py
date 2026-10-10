@@ -94,7 +94,9 @@ def test_default_model_key_constraints(default_model):
 
 def test_flow_deviation_objective_uses_binary_penalty(case):
     spec = ProblemSpec(
-        objective="flow_deviation", penalty_formulation="binary", target_flows_kg_s={tag: 10.0 for tag in case.heat_exchangers}
+        objective="flow_deviation",
+        penalty_formulation="binary",
+        target_flows_kg_s={tag: 10.0 for tag in case.heat_exchangers},
     )
     assert spec.uses_binary_penalty is True
     m = build_model(case, spec)

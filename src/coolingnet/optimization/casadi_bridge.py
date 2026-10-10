@@ -122,7 +122,11 @@ class CasadiProblem:
 def translate(model: pyo.ConcreteModel) -> CasadiProblem:
     if ca is None:  # pragma: no cover
         raise CasadiTranslationError("casadi is not installed (pip install casadi)")
-    variables = [v for v in model.component_data_objects(pyo.Var, active=True, descend_into=True) if not v.fixed]
+    variables = [
+        v
+        for v in model.component_data_objects(pyo.Var, active=True, descend_into=True)
+        if not v.fixed
+    ]
     syms = [ca.SX.sym(f"x{i}") for i, _ in enumerate(variables)]
     symbols = {id(v): s for v, s in zip(variables, syms, strict=True)}
     visitor = _ToCasadi(symbols)
@@ -205,7 +209,10 @@ class CasadiSolveError(RuntimeError):
 
 
 def has_free_discrete(model: pyo.ConcreteModel) -> bool:
-    return any((v.is_integer() or v.is_binary()) and not v.fixed for v in model.component_data_objects(pyo.Var, active=True, descend_into=True))
+    return any(
+        (v.is_integer() or v.is_binary()) and not v.fixed
+        for v in model.component_data_objects(pyo.Var, active=True, descend_into=True)
+    )
 
 
 def solve_with_casadi(
@@ -231,7 +238,16 @@ def solve_with_casadi(
     if scale and hasattr(model, "scaling_factor"):
         target = pyo.TransformationFactory("core.scale_model").create_using(model)
     try:
-        res = _solve_casadi_core(target, solver, rel_gap=rel_gap, abs_gap=abs_gap, time_limit_s=time_limit_s, verbose=verbose, relax_integrality=relax_integrality, options=options)
+        res = _solve_casadi_core(
+            target,
+            solver,
+            rel_gap=rel_gap,
+            abs_gap=abs_gap,
+            time_limit_s=time_limit_s,
+            verbose=verbose,
+            relax_integrality=relax_integrality,
+            options=options,
+        )
     except RuntimeError as first_error:
         if solver != "bonmin":
             raise CasadiSolveError(str(first_error)) from first_error
@@ -239,14 +255,30 @@ def solve_with_casadi(
         # retry once with a conservative configuration before giving up.
         retry = {**BONMIN_FALLBACK, **(options or {})}
         try:
-            res = _solve_casadi_core(target, solver, rel_gap=rel_gap, abs_gap=abs_gap, time_limit_s=time_limit_s, verbose=verbose, relax_integrality=relax_integrality, options=retry)
+            res = _solve_casadi_core(
+                target,
+                solver,
+                rel_gap=rel_gap,
+                abs_gap=abs_gap,
+                time_limit_s=time_limit_s,
+                verbose=verbose,
+                relax_integrality=relax_integrality,
+                options=retry,
+            )
             res.stats["retried"] = True
         except RuntimeError as second_error:
-            raise CasadiSolveError(f"bonmin failed twice: {first_error} / {second_error}") from second_error
+            raise CasadiSolveError(
+                f"bonmin failed twice: {first_error} / {second_error}"
+            ) from second_error
     if target is not model:
         pyo.TransformationFactory("core.scale_model").propagate_solution(target, model)
         for v in model.component_data_objects(pyo.Var, active=True, descend_into=True):
-            if (v.is_integer() or v.is_binary()) and not v.fixed and v.value is not None and not relax_integrality:
+            if (
+                (v.is_integer() or v.is_binary())
+                and not v.fixed
+                and v.value is not None
+                and not relax_integrality
+            ):
                 v.set_value(float(round(v.value)), skip_validation=True)
     return res
 
@@ -305,11 +337,17 @@ def _solve_casadi_core(
     stats = S.stats()
     x = res["x"].full().ravel()
     for v, val, d in zip(prob.variables, x, prob.discrete, strict=True):
-        v.set_value(float(round(val)) if (d and not relax_integrality) else float(val), skip_validation=True)
+        v.set_value(
+            float(round(val)) if (d and not relax_integrality) else float(val), skip_validation=True
+        )
     status = str(stats.get("return_status", "unknown"))
     return CasadiResult(
         status=status,
-        success=bool(stats.get("success", status.upper().startswith("SUCCESS") or status == "Solve_Succeeded")),
+        success=bool(
+            stats.get(
+                "success", status.upper().startswith("SUCCESS") or status == "Solve_Succeeded"
+            )
+        ),
         objective=float(res["f"]),
         time_s=time.perf_counter() - t0,
         stats={k: v for k, v in stats.items() if isinstance(v, (int, float, str, bool))},

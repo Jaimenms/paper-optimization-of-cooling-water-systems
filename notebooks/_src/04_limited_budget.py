@@ -60,6 +60,25 @@ for ax, name in zip(axes, short, strict=True):
 fig.savefig("../figures/fig05_06_diameters_budget_cases.png", dpi=150, bbox_inches="tight")
 
 # %% [markdown]
+# Interventions side by side with the paper (Figs. 5-6 and the text of Section 3.5):
+
+# %%
+rows = []
+for name, s in short.items():
+    changed = {str(e["id"]): e["diameter_in"] for e in s.edges if e["kind"] == "pipe" and e.get("changed")}
+    pub = REF.BUDGET_DESIGNS[name]
+    rows.append(
+        {
+            "case": name,
+            "pump [paper]": pub["pump"],
+            "pump [this work]": "/".join(s.pump_options().values()),
+            "pipes changed [paper]": pub["pipes_changed"],
+            "pipes changed [this work]": changed,
+        }
+    )
+pd.DataFrame(rows).set_index("case")
+
+# %% [markdown]
 # ## Figs. 7 and 8 - budget sweep
 #
 # Beyond ~3 kUSD/y it becomes more interesting to buy the new pump and give up the additional

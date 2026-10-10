@@ -1,0 +1,112 @@
+{
+ "paper": {
+  "authors": "J.N.M. Souza, A.L.L. Levy, A.L.H. Costa",
+  "title": "Optimization of cooling water system hydraulic debottlenecking",
+  "journal": "Applied Thermal Engineering",
+  "volume": 128,
+  "pages": "1531-1542",
+  "year": 2018,
+  "doi": "10.1016/j.applthermaleng.2017.09.089"
+ },
+ "units": "values as printed in the paper: kg/s, degC, m, kUSD/y, %",
+ "heat_exchangers": ["E-101", "E-102", "E-103", "E-104", "E-105"],
+ "table8": {
+  "caption": "Table 8 - Cooling water system performance: hot stream outlet temperatures and penalties (p. 1538)",
+  "columns": {
+   "Design condition (C)": [65.00, 80.00, 40.00, 41.00, 41.00],
+   "Initial condition (C)": [63.48, 78.39, 39.66, 40.91, 39.75],
+   "Current condition (C)": [65.16, 81.59, 41.82, 42.81, 41.53],
+   "Current condition penalty (kUSD/y)": [1.96, 19.82, 22.70, 22.61, 6.62]
+  },
+  "totals": {"Current condition penalty (kUSD/y)": 73.71}
+ },
+ "table9": {
+  "caption": "Table 9 - Optimization results, no available budget (p. 1539)",
+  "columns": {
+   "Current cooling water flow rate (kg/s)": [11.92, 28.85, 35.57, 15.53, 3.23],
+   "Optimal cooling water flow rate (kg/s)": [12.65, 23.04, 33.69, 17.21, 3.58],
+   "Valve head loss (m)": [0.49, 3.70, 1.90, 0.00, 0.00],
+   "Penalty (kUSD/y)": [0.00, 27.29, 24.86, 16.25, 0.00],
+   "Penalty variation (%)": [-100.00, 37.69, 9.52, -28.13, -100.00]
+  },
+  "totals": {"current_flow": 95.10, "optimal_flow": 90.17, "penalty": 68.40, "penalty_variation": -7.20},
+  "text": {
+   "caption": "Section 3.3 (p. 1538): penalty 73.71 -> 68.40 kUSD/y, operating cost 20.16 -> 20.47 kUSD/y, total cost reduction 5.33 %",
+   "penalty_before": 73.71,
+   "penalty_after": 68.40,
+   "operating_before": 20.16,
+   "operating_after": 20.47,
+   "total_reduction_pct": 5.33
+  }
+ },
+ "table10": {
+  "caption": "Table 10 - Optimization results, unlimited budget (p. 1540); Case 1: pen = 12.5, Case 2: pen = 40 kUSD/(y C)",
+  "columns": {
+   "Current cooling water flow rate (kg/s)": [11.92, 28.85, 35.57, 15.53, 3.23],
+   "Optimal flow Case 1 (kg/s)": [13.56, 30.52, 40.29, 19.96, 3.88],
+   "Optimal flow Case 2 (kg/s)": [13.73, 30.26, 41.26, 22.68, 3.94],
+   "Valve head loss Case 1 (m)": [0.00, 1.13, 0.00, 0.00, 0.84],
+   "Valve head loss Case 2 (m)": [0.11, 0.00, 0.00, 0.00, 1.06],
+   "Penalty Case 1 (kUSD/y)": [0.00, 19.67, 18.65, 13.22, 0.00],
+   "Penalty Case 2 (kUSD/y)": [0.00, 65.04, 57.91, 27.62, 0.00]
+  },
+  "totals": {"case1": {"flow": 108.21, "penalty": 51.54}, "case2": {"flow": 111.87, "penalty": 150.57}},
+  "designs": {
+   "caption": "Figs. 2-3 and Section 3.4 text: both cases install pump 4; Case 1 enlarges pipes 5 and 6 to 8 in, Case 2 substitutes 10 pipes",
+   "case1": {"pump": "4", "pipes_changed": {"5": 8.0, "6": 8.0}},
+   "case2": {"pump": "4", "n_pipes_changed": 10}
+  }
+ },
+ "table11": {
+  "caption": "Table 11 - Optimization results, finite budget (p. 1541); 1A: 2.625, 1B: 4.125, 1C: 5.250 kUSD/y",
+  "columns": {
+   "Optimal flow 1A (kg/s)": [12.01, 25.71, 35.67, 17.65, 3.66],
+   "Optimal flow 1B (kg/s)": [13.51, 30.02, 41.56, 18.12, 3.86],
+   "Optimal flow 1C (kg/s)": [13.53, 30.27, 40.96, 18.98, 3.87],
+   "Valve head loss 1A (m)": [0.00, 1.45, 0.00, 0.00, 0.03],
+   "Valve head loss 1B (m)": [0.51, 1.81, 0.00, 0.00, 1.62],
+   "Valve head loss 1C (m)": [0.27, 1.48, 0.00, 0.00, 0.23],
+   "Penalty 1A (kUSD/y)": [1.76, 23.79, 22.54, 16.09, 0.00],
+   "Penalty 1B (kUSD/y)": [0.00, 20.06, 16.77, 17.37, 0.00],
+   "Penalty 1C (kUSD/y)": [0.00, 19.86, 17.65, 15.34, 0.00]
+  },
+  "totals": {"1A": {"flow": 94.70, "penalty": 64.18}, "1B": {"flow": 107.07, "penalty": 54.20}, "1C": {"flow": 107.61, "penalty": 52.85}},
+  "designs": {
+   "caption": "Figs. 5-6 and Section 3.5 text: 1A enlarges pipes 5 and 6 (pump kept); 1B installs pump 4 only; 1C installs pump 4 and enlarges pipe 5",
+   "1A": {"pump": "1", "pipes_changed": {"5": 8.0, "6": 8.0}},
+   "1B": {"pump": "4", "pipes_changed": {}},
+   "1C": {"pump": "4", "pipes_changed": {"5": 8.0}}
+  }
+ },
+ "table12": {
+  "caption": "Table 12 - Optimization results, purely hydraulic approach with the budget of Case 1A (p. 1541)",
+  "columns": {
+   "Current cooling water flow rate (kg/s)": [11.92, 28.85, 35.57, 15.53, 3.23],
+   "Desired cooling water flow rate (kg/s)": [11.36, 52.24, 46.22, 21.23, 3.16],
+   "Optimal cooling water flow rate (kg/s)": [4.41, 33.03, 39.23, 14.28, 0.073],
+   "Valve head loss (m)": [7.14, 0.00, 0.00, 2.58, 6.42],
+   "Penalty (kUSD/y)": [36.90, 13.72, 13.51, 24.19, 320.0]
+  },
+  "totals": {"current_flow": 95.10, "desired_flow": 134.21, "optimal_flow": 91.02, "penalty": 408.32},
+  "flow_deviation_kg2_s2": {
+   "caption": "Section 3.7 text: sum of squared deviations between cooler flow rates and the desired ones",
+   "current_kg2_s2": 696.8,
+   "optimal_kg2_s2": 524.0
+  },
+  "design": {
+   "caption": "Fig. 11 and Section 3.7 text: existing pump kept; pipes 1, 10 and 15 enlarged",
+   "pump": "1",
+   "pipes_changed": {"1": 24.0, "10": 16.0, "15": 18.0}
+  }
+ },
+ "figures": {
+  "fig9_objective_kUSD_y": {
+   "caption": "Fig. 9 - Comparison of objective function values (kUSD/y)",
+   "No Budget": 88.87, "Case 1A": 86.93, "Case 1B": 85.04, "Case 1C": 84.77, "Case 1": 84.59
+  },
+  "fig10_penalty_reduction_pct": {
+   "caption": "Fig. 10 - Comparison of penalty reduction (%) relative to the current condition (73.71 kUSD/y)",
+   "No Budget": 7.21, "Case 1A": 12.95, "Case 1B": 26.48, "Case 1C": 28.30, "Case 1": 30.08
+  }
+ }
+}

@@ -75,11 +75,12 @@ plot_network(custom, ax=ax, title=custom.name)
 display(T.table_circuits(custom, net))
 
 # %% [markdown]
-# The configuration can be saved and later loaded with `load_case(...)` (or passed to the CLI with
-# `coolingnet run --config my_network.yaml`).
+# The configuration can be saved and later loaded with `load_case(...)` (or checked and run from
+# the shell with `coolingnet validate cases/example_six_coolers.yaml` and
+# `coolingnet run cases/example_six_coolers.yaml --out results_six_coolers`).
 
 # %%
-path = dump_case(custom, Path("../configs/example_six_coolers.yaml"))
+path = dump_case(custom, Path("../cases/example_six_coolers.yaml"))
 reloaded = load_case(path)
 assert reloaded == custom
 print("saved to", path)

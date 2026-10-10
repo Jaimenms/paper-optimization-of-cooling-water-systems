@@ -1,35 +1,40 @@
-# Reproduction of Souza, Levy & Costa (2018) - cooling water system hydraulic debottlenecking
-PY ?= .venv/bin/python
+# coolingnet - series conventions: see docs/conventions.md
+.PHONY: setup lint format test test-all run run-quick eval figures notebooks clean
+
 RESULTS ?= results
 
-.PHONY: setup test test-fast run figures notebooks clean lint
-
-setup:            ## create the virtual environment and install the package (needs `uv`)
-	uv venv --python 3.12 .venv
-	uv pip install --python $(PY) -e ".[notebooks,dev]"
+setup:            ## create .venv with uv (Python 3.12) and install the package with all extras
+	uv sync --all-extras
 
 lint:             ## static checks
-	.venv/bin/ruff check src tests
+	uv run ruff check src tests scripts notebooks/_src
+	uv run ruff format --check src tests scripts
 
-test-fast:        ## unit tests (seconds)
-	.venv/bin/pytest -q -m "not slow"
+format:           ## format the code
+	uv run ruff format src tests scripts
+	uv run ruff check --fix src tests scripts notebooks/_src
 
-test:             ## all tests, including the optimization runs (minutes)
-	.venv/bin/pytest -q
+test:             ## fast tests (seconds)
+	uv run pytest -q -m "not slow"
 
-run:              ## solve every scenario of the paper (cached in $(RESULTS)/)
-	.venv/bin/coolingnet -v run --results $(RESULTS)
+test-all:         ## all tests, including the slow optimization runs (minutes)
+	uv run pytest -q
+
+run:              ## solve every scenario of the paper and write $(RESULTS)/ (~30 min, cached)
+	uv run coolingnet -v run --out $(RESULTS)
 
 run-quick:        ## same with coarse sweeps (~15 min)
-	.venv/bin/coolingnet -v run --results $(RESULTS) --budget-steps 8 --penalty-steps 10
+	uv run coolingnet -v run --out $(RESULTS) --budget-steps 8 --penalty-steps 10
 
-figures:          ## export every table (csv/md) and figure (png) from the cached results
-	.venv/bin/coolingnet figures --results $(RESULTS) --out figures
+eval:             ## compare the cached results with the published tables and write $(RESULTS)/eval/
+	uv run coolingnet eval --results $(RESULTS) --out $(RESULTS)/eval
+
+figures:          ## export every table (csv/md) and figure (png) of the paper to figures/
+	uv run coolingnet figures --results $(RESULTS) --out figures
 
 notebooks:        ## regenerate the notebooks from notebooks/_src and execute them
-	for f in notebooks/_src/*.py; do .venv/bin/jupytext --to ipynb --output "notebooks/$$(basename "$${f%.py}").ipynb" "$$f"; done
-	cd notebooks && for nb in *.ipynb; do ../.venv/bin/jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=3600 "$$nb"; done
+	uv run python scripts/build_notebooks.py
 
-clean:
-	rm -rf .pytest_cache .ruff_cache build dist
+clean:            ## remove caches and build artefacts
+	rm -rf .pytest_cache .ruff_cache .mypy_cache build dist *.egg-info
 	find . -name "__pycache__" -type d -prune -exec rm -rf {} +

@@ -65,4 +65,12 @@ def pump_operating_cost(
     energy_cost_usd_kwh: float,
 ):
     """Operating cost [USD/y] = (m g H / eta) [W] * Nop [h/y] * pc [USD/kWh] / 1000 (Eq. 48)."""
-    return mass_flow_kg_s * head_m * gravity / efficiency * operating_hours * energy_cost_usd_kwh / 1000.0
+    return (
+        mass_flow_kg_s
+        * head_m
+        * gravity
+        / efficiency
+        * operating_hours
+        * energy_cost_usd_kwh
+        / 1000.0
+    )

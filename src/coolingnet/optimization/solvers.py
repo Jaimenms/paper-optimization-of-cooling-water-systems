@@ -30,10 +30,14 @@ class SolverSettings:
     options: dict = field(default_factory=dict)
     keep_files: bool = False
     cutoff: float | None = None  # objective value of a known feasible solution (prunes the tree)
-    isolate: bool | None = None  # run branch-and-bound in a child process (default: yes for bonmin MINLPs)
+    isolate: bool | None = (
+        None  # run branch-and-bound in a child process (default: yes for bonmin MINLPs)
+    )
     max_node_iter: int = 1000  # IPOPT iteration limit inside the branch-and-bound nodes
     multistart: int = 4  # nlpbb: extra valve starting points when polishing a design
-    local_search_steps: int = 1  # nlpbb: neighbourhood radius (catalogue steps) of the final local search; 0 disables
+    local_search_steps: int = (
+        1  # nlpbb: neighbourhood radius (catalogue steps) of the final local search; 0 disables
+    )
 
 
 @dataclass
@@ -105,8 +109,16 @@ def _solve_with_nlpbb(model: pyo.ConcreteModel, settings: SolverSettings) -> Sol
     from coolingnet.optimization.nlpbb import NlpBranchAndBound
 
     t0 = time.perf_counter()
-    target = pyo.TransformationFactory("core.scale_model").create_using(model) if hasattr(model, "scaling_factor") else model
-    sf = model.scaling_factor[model.obj] if hasattr(model, "scaling_factor") and model.obj in model.scaling_factor else 1.0
+    target = (
+        pyo.TransformationFactory("core.scale_model").create_using(model)
+        if hasattr(model, "scaling_factor")
+        else model
+    )
+    sf = (
+        model.scaling_factor[model.obj]
+        if hasattr(model, "scaling_factor") and model.obj in model.scaling_factor
+        else 1.0
+    )
     bb = NlpBranchAndBound(
         target,
         rel_gap=settings.rel_gap,
@@ -129,7 +141,9 @@ def _solve_with_nlpbb(model: pyo.ConcreteModel, settings: SolverSettings) -> Sol
                     v.set_value(float(round(v.value)), skip_validation=True)
     viol = max_constraint_violation(model) if res.x is not None else math.inf
     feasible = viol <= FEASIBILITY_TOL
-    termination = res.status if feasible else ("infeasible" if res.status == "infeasible" else "error")
+    termination = (
+        res.status if feasible else ("infeasible" if res.status == "infeasible" else "error")
+    )
     if settings.cutoff is not None and res.x is None and res.status == "infeasible":
         termination = "cutoff"
     return SolveReport(
@@ -145,15 +159,22 @@ def _solve_with_nlpbb(model: pyo.ConcreteModel, settings: SolverSettings) -> Sol
     )
 
 
-
 def _solve_with_casadi(model: pyo.ConcreteModel, settings: SolverSettings) -> SolveReport:
-    from coolingnet.optimization.casadi_bridge import CasadiSolveError, max_constraint_violation, solve_with_casadi
+    from coolingnet.optimization.casadi_bridge import (
+        CasadiSolveError,
+        max_constraint_violation,
+        solve_with_casadi,
+    )
 
     options = dict(settings.options)
     if settings.name == "bonmin":
         options.setdefault("max_iter", settings.max_node_iter)
     if settings.cutoff is not None and settings.name == "bonmin":
-        sf = model.scaling_factor[model.obj] if hasattr(model, "scaling_factor") and model.obj in model.scaling_factor else 1.0
+        sf = (
+            model.scaling_factor[model.obj]
+            if hasattr(model, "scaling_factor") and model.obj in model.scaling_factor
+            else 1.0
+        )
         options.setdefault("cutoff", settings.cutoff * sf)
     t0 = time.perf_counter()
     try:
@@ -237,7 +258,11 @@ def _solve_with_pyscipopt(model: pyo.ConcreteModel, settings: SolverSettings) ->
     workdir = Path(tempfile.mkdtemp(prefix="coolingnet_scip_"))
     try:
         nl_path = workdir / "model.nl"
-        model.write(str(nl_path), format="nl", io_options={"symbolic_solver_labels": True, "linear_presolve": False})
+        model.write(
+            str(nl_path),
+            format="nl",
+            io_options={"symbolic_solver_labels": True, "linear_presolve": False},
+        )
         s = scip.Model()
         if not settings.verbose:
             s.hideOutput()
@@ -250,11 +275,17 @@ def _solve_with_pyscipopt(model: pyo.ConcreteModel, settings: SolverSettings) ->
         for key, val in settings.options.items():
             s.setParam(key, val)
 
-        pyomo_vars = {v.name: v for v in model.component_data_objects(pyo.Var, active=True, descend_into=True) if not v.fixed}
+        pyomo_vars = {
+            v.name: v
+            for v in model.component_data_objects(pyo.Var, active=True, descend_into=True)
+            if not v.fixed
+        }
         scip_vars = {v.name: v for v in s.getVars()}
         missing = set(scip_vars) - set(pyomo_vars)
         if missing:
-            raise SolverError(f"variables in the .nl file not found in the Pyomo model: {sorted(missing)[:5]}")
+            raise SolverError(
+                f"variables in the .nl file not found in the Pyomo model: {sorted(missing)[:5]}"
+            )
 
         if settings.warm_start:
             _add_warm_start(s, scip_vars, pyomo_vars)
@@ -321,22 +352,43 @@ def _add_warm_start(s, scip_vars: dict, pyomo_vars: dict) -> None:
 # Any other solver registered in Pyomo (bonmin, couenne, ipopt, scip executable, ...)
 # --------------------------------------------------------------------------- #
 _OPTION_MAPS = {
-    "bonmin": lambda st: {"bonmin.allowable_fraction_gap": st.rel_gap, "bonmin.allowable_gap": st.abs_gap, "bonmin.time_limit": st.time_limit_s},
+    "bonmin": lambda st: {
+        "bonmin.allowable_fraction_gap": st.rel_gap,
+        "bonmin.allowable_gap": st.abs_gap,
+        "bonmin.time_limit": st.time_limit_s,
+    },
     "couenne": lambda st: {},
-    "scip-exe": lambda st: {"limits/gap": st.rel_gap, "limits/absgap": st.abs_gap, "limits/time": st.time_limit_s},
+    "scip-exe": lambda st: {
+        "limits/gap": st.rel_gap,
+        "limits/absgap": st.abs_gap,
+        "limits/time": st.time_limit_s,
+    },
     "ipopt": lambda st: {"max_cpu_time": st.time_limit_s},
 }
 
 
 def _solve_with_pyomo_shell(model: pyo.ConcreteModel, settings: SolverSettings) -> SolveReport:
     name = "scip" if settings.name == "scip-exe" else settings.name
-    opt = pyo.SolverFactory(name, executable=settings.executable) if settings.executable else pyo.SolverFactory(name)
+    opt = (
+        pyo.SolverFactory(name, executable=settings.executable)
+        if settings.executable
+        else pyo.SolverFactory(name)
+    )
     if opt is None or not opt.available(exception_flag=False):
-        raise SolverError(f"solver {settings.name!r} is not available (executable={settings.executable})")
-    for key, val in {**_OPTION_MAPS.get(settings.name, lambda st: {})(settings), **settings.options}.items():
+        raise SolverError(
+            f"solver {settings.name!r} is not available (executable={settings.executable})"
+        )
+    for key, val in {
+        **_OPTION_MAPS.get(settings.name, lambda st: {})(settings),
+        **settings.options,
+    }.items():
         opt.options[key] = val
     t0 = time.perf_counter()
-    results = opt.solve(model, tee=settings.verbose, load_solutions=False, warmstart=settings.warm_start) if name in ("bonmin",) else opt.solve(model, tee=settings.verbose, load_solutions=False)
+    results = (
+        opt.solve(model, tee=settings.verbose, load_solutions=False, warmstart=settings.warm_start)
+        if name in ("bonmin",)
+        else opt.solve(model, tee=settings.verbose, load_solutions=False)
+    )
     tc = str(results.solver.termination_condition)
     status = str(results.solver.status)
     has_solution = len(results.solution) > 0
@@ -344,7 +396,10 @@ def _solve_with_pyomo_shell(model: pyo.ConcreteModel, settings: SolverSettings) 
         model.solutions.load_from(results)
     if tc in ("optimal", "locallyOptimal", "globallyOptimal"):
         termination = "optimal"
-    elif tc in ("feasible", "maxTimeLimit", "maxIterations", "maxEvaluations", "other") and has_solution:
+    elif (
+        tc in ("feasible", "maxTimeLimit", "maxIterations", "maxEvaluations", "other")
+        and has_solution
+    ):
         termination = "feasible"
     elif tc in ("infeasible", "infeasibleOrUnbounded"):
         termination = "infeasible"

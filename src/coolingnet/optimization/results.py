@@ -195,7 +195,9 @@ class Solution:
                     "h_hot_W_m2K": d["h_hot"],
                     "duty_W": d["C_hot"] * (spec_he.hot_inlet_C - t_hot_out),
                     "penalty_factor": d["pen"],
-                    "penalty_active": (v(m.y_he[h.id]) > 0.5) if hasattr(m, "y_he") else (penalty_of(h.id, t_hot_out) > 1e-6),
+                    "penalty_active": (v(m.y_he[h.id]) > 0.5)
+                    if hasattr(m, "y_he")
+                    else (penalty_of(h.id, t_hot_out) > 1e-6),
                     "penalty_USD_y": penalty_of(h.id, t_hot_out),
                     "valve_head_loss_m": v(m.lvalve[c.index]) if hyd else 0.0,
                     "head_loss_m": v(m.f_he[h.id]) if hyd else None,
@@ -212,7 +214,12 @@ class Solution:
                     "q_m3_s": v(m.q[u.id]),
                     "k_kg_s": rho * v(m.q[u.id]),
                     "head_m": v(m.f_pump[u.id]) if hyd else None,
-                    "operating_cost_USD_y": v(m.f_pump[u.id]) * rho * v(m.q[u.id]) * m.params["ope_factor"] if hyd else 0.0,
+                    "operating_cost_USD_y": v(m.f_pump[u.id])
+                    * rho
+                    * v(m.q[u.id])
+                    * m.params["ope_factor"]
+                    if hyd
+                    else 0.0,
                 }
             )
 
@@ -236,7 +243,8 @@ class Solution:
         }
         if spec.objective == "flow_deviation" and spec.target_flows_kg_s:
             costs["flow_deviation_kg2_s2"] = sum(
-                (rho * v(m.q[h.id]) - spec.target_flows_kg_s[h.tag]) ** 2 for h in net.heat_exchangers
+                (rho * v(m.q[h.id]) - spec.target_flows_kg_s[h.tag]) ** 2
+                for h in net.heat_exchangers
             )
         return cls(
             label=label or spec.label,

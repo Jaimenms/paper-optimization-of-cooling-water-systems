@@ -13,7 +13,9 @@ from coolingnet.reporting.network_plot import plot_network
 from coolingnet.workflow.store import ResultStore
 
 
-def export_all(case: CaseStudy, results_dir: str | Path, out_dir: str | Path, *, fmt: str = "png") -> list[Path]:
+def export_all(
+    case: CaseStudy, results_dir: str | Path, out_dir: str | Path, *, fmt: str = "png"
+) -> list[Path]:
     store = ResultStore(results_dir)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -59,7 +61,11 @@ def export_all(case: CaseStudy, results_dir: str | Path, out_dir: str | Path, *,
                 fig, ax = plt.subplots(figsize=(6.5, 5.5))
                 fig_.plot_diameter_dotchart(case, s, ax=ax, label=name)
                 save_fig(fig, f"fig{i:02d}_diameters_{name}")
-        budget_cases = {name: store.load(f"budget_{name}") for name in case.scenarios.budget_cases if f"budget_{name}" in have}
+        budget_cases = {
+            name: store.load(f"budget_{name}")
+            for name in case.scenarios.budget_cases
+            if f"budget_{name}" in have
+        }
         if budget_cases:
             save_table(tab.table_budget_cases(budget_cases), "table11_budget_cases")
             for name, s in budget_cases.items():
@@ -68,18 +74,35 @@ def export_all(case: CaseStudy, results_dir: str | Path, out_dir: str | Path, *,
                 save_fig(fig, f"fig05_06_diameters_{name}")
         if store.has_sweep("penalty_sweep"):
             fig, ax = plt.subplots(figsize=(6.5, 5))
-            fig_.plot_penalty_sweep(store.load_sweep("penalty_sweep"), ax=ax, markers={k: v for k, v in case.scenarios.penalty_cases.items()})
+            fig_.plot_penalty_sweep(
+                store.load_sweep("penalty_sweep"),
+                ax=ax,
+                markers={k: v for k, v in case.scenarios.penalty_cases.items()},
+            )
             save_fig(fig, "fig04_penalty_sweep")
         if store.has_sweep("budget_sweep"):
             sweep = store.load_sweep("budget_sweep")
             unl = cases.get(next(iter(case.scenarios.penalty_cases))) if cases else None
             fig, ax = plt.subplots(figsize=(6.5, 5))
-            fig_.plot_budget_costs(sweep, ax=ax, current_penalty=cur.costs["cpen"], unlimited=unl, markers={f"Case {k}": v for k, v in case.scenarios.budget_cases.items()})
+            fig_.plot_budget_costs(
+                sweep,
+                ax=ax,
+                current_penalty=cur.costs["cpen"],
+                unlimited=unl,
+                markers={f"Case {k}": v for k, v in case.scenarios.budget_cases.items()},
+            )
             save_fig(fig, "fig07_budget_costs")
             fig, ax = plt.subplots(figsize=(6.5, 5))
-            fig_.plot_budget_interventions(sweep, ax=ax, unlimited=unl, markers={f"Case {k}": v for k, v in case.scenarios.budget_cases.items()})
+            fig_.plot_budget_interventions(
+                sweep,
+                ax=ax,
+                unlimited=unl,
+                markers={f"Case {k}": v for k, v in case.scenarios.budget_cases.items()},
+            )
             save_fig(fig, "fig08_budget_interventions")
-            written.append(fig_.save_budget_animation(case, sweep, out / "video01_budget_animation.gif"))
+            written.append(
+                fig_.save_budget_animation(case, sweep, out / "video01_budget_animation.gif")
+            )
         comparison = {}
         if "no_budget" in have:
             comparison["No Budget"] = store.load("no_budget")
@@ -87,13 +110,17 @@ def export_all(case: CaseStudy, results_dir: str | Path, out_dir: str | Path, *,
             comparison[f"Case {name}"] = s
         first_case = next(iter(case.scenarios.penalty_cases), None)
         if first_case in cases:
-            comparison[f"Case {first_case[-1] if first_case.startswith('case') else first_case}"] = cases[first_case]
+            comparison[
+                f"Case {first_case[-1] if first_case.startswith('case') else first_case}"
+            ] = cases[first_case]
         if comparison:
             fig, ax = plt.subplots(figsize=(6.5, 4.5))
             fig_.plot_comparison_bars(comparison, quantity="objective", ax=ax)
             save_fig(fig, "fig09_objective_comparison")
             fig, ax = plt.subplots(figsize=(6.5, 4.5))
-            fig_.plot_comparison_bars(comparison, quantity="penalty_reduction", reference_penalty=cur.costs["cpen"], ax=ax)
+            fig_.plot_comparison_bars(
+                comparison, quantity="penalty_reduction", reference_penalty=cur.costs["cpen"], ax=ax
+            )
             save_fig(fig, "fig10_penalty_reduction")
             save_table(tab.table_costs(comparison), "table_costs_comparison")
         if "desired_flows" in have and "hydraulic_only" in have:

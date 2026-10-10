@@ -2,10 +2,11 @@ cff-version: 1.2.0
 message: "If you use this software, please cite the original paper and this repository."
 title: "coolingnet: optimization of cooling water system hydraulic debottlenecking (Python reimplementation)"
 type: software
+version: 0.1.0
+license: MIT
 authors:
   - family-names: Souza
     given-names: Jaime N. M.
-license: MIT
 references:
   - type: article
     title: "Optimization of cooling water system hydraulic debottlenecking"

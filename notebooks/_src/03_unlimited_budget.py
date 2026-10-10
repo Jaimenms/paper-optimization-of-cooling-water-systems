@@ -62,9 +62,25 @@ fig, axes = plt.subplots(1, 2, figsize=(13, 5.5))
 F.plot_diameter_dotchart(case, cases["case1"], ax=axes[0], label="Case 1", title="Fig. 2 - Case 1 (pen = 12.5 kUSD/(y °C))")
 F.plot_diameter_dotchart(case, cases["case2"], ax=axes[1], label="Case 2", title="Fig. 3 - Case 2 (pen = 40 kUSD/(y °C))")
 fig.savefig("../figures/fig02_03_diameters.png", dpi=150, bbox_inches="tight")
+# %% [markdown]
+# Interventions of Figs. 2-3 side by side with the paper (Section 3.4: both cases install pump
+# alternative 4; Case 1 enlarges pipes 5 and 6 to 8 in, Case 2 substitutes ten pipes):
+
+# %%
+rows = []
 for name, s in cases.items():
-    changed = {k: v for k, v in s.pipe_diameters().items() if any(e["kind"] == "pipe" and str(e["id"]) == k and e["changed"] for e in s.edges)}
-    print(f"{name}: pump {s.pump_options()} | {len(changed)} pipes changed: {changed}")
+    changed = {str(e["id"]): e["diameter_in"] for e in s.edges if e["kind"] == "pipe" and e.get("changed")}
+    pub = REF.UNLIMITED_DESIGNS[name]
+    rows.append(
+        {
+            "case": name,
+            "pump [paper]": pub["pump"],
+            "pump [this work]": "/".join(s.pump_options().values()),
+            "pipes changed [paper]": pub.get("pipes_changed", f"{pub.get('n_pipes_changed')} pipes"),
+            "pipes changed [this work]": changed,
+        }
+    )
+pd.DataFrame(rows).set_index("case")
 
 # %% [markdown]
 # > **A modelling note.** The first Bonmin run of Case 2 during this port returned a design with
@@ -74,7 +90,8 @@ for name, s in cases.items():
 # > $T_{base} = T_{wb}$ (water leaving the tower at the wet-bulb temperature with a *negative*
 # > driving force at the top of the packing). The model therefore enforces
 # > $H^{sat}_m - H_m \ge 100\ \mathrm{J/kg}$ at every quadrature point, a physical requirement that
-# > the published solutions satisfy by a wide margin (> 40 kJ/kg). See `docs/model.md`.
+# > the published solutions satisfy by a wide margin (> 40 kJ/kg). See `docs/formulation.md` and
+# > `docs/errata.md` (E2).
 
 # %% [markdown]
 # ## Fig. 4 - impact of the penalty factor (unlimited budget)

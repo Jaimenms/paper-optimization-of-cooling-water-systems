@@ -1,0 +1,123 @@
+
+--- Job coolingnetwork_applied_v21_part2_initial.gms Start 03/04/17 21:21:40 24.1.3 r41464 WEX-WEI x86_64/MS Windows
+GAMS 24.1.3   Copyright (C) 1987-2013 GAMS Development. All rights reserved
+Licensee: Andre Luiz Hemerly Costa                       G121101:1009AP-WIN
+          UNIVERSIDADE DO ESTADO DO RIO DE JANEIRO                   DC9993
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- coolingnetwork_applied_v21_part2_initial.gms(11) 2 Mb
+--- .coolingnetwork_applied_v21_part0.gms(681) 3 Mb
+--- coolingnetwork_applied_v21_part2_initial.gms(206) 3 Mb
+--- Starting execution: elapsed 0:00:00.010
+--- coolingnetwork_applied_v21_part2_initial.gms(694) 4 Mb
+--- GDXin=C:\Users\Jaime\Desktop\Artigo applied\Desenv4\gdx/design_original.gdx
+--- coolingnetwork_applied_v21_part2_initial.gms(845) 4 Mb
+--- Generating MINLP model design_original
+--- coolingnetwork_applied_v21_part2_initial.gms(847) 7 Mb
+---   1,954 rows  1,208 columns  7,064 non-zeroes
+---   6,026 nl-code  1,942 nl-non-zeroes
+---   5 discrete-columns
+--- coolingnetwork_applied_v21_part2_initial.gms(847) 5 Mb
+--- Executing SBB: elapsed 0:00:00.076
+
+Simple B&B       24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+
+ 1208 columns (349 discrete), 1954 rows, 7064 nonzeros
+CONOPT 3         24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+ 
+ 
+    C O N O P T 3   version 3.15L
+    Copyright (C)   ARKI Consulting and Development A/S
+                    Bagsvaerdvej 246 A
+                    DK-2880 Bagsvaerd, Denmark
+ 
+ 
+   Iter Phase Ninf   Infeasibility   RGmax    NSB   Step InItr MX OK
+      0   0        7.0104049311E+05 (Input point)
+                                Pre-triangular equations:       49
+                                Post-triangular equations:     328
+      1   0        6.3752286399E+05 (After pre-processing)
+      2   0        9.3148902766E+00 (After scaling)
+      5   0     8  9.3148902766E+00               0.0E+00      T  T
+     10   0     8  9.3148902766E+00               0.0E+00      T  T
+     15   0     8  9.3148902766E+00               0.0E+00      T  T
+     20   0     8  9.3148902766E+00               0.0E+00      T  T
+     25   0     8  9.3148902766E+00               0.0E+00      T  T
+ 
+   Iter Phase Ninf   Infeasibility   RGmax    NSB   Step InItr MX OK
+     30   0     8  9.3148902766E+00               0.0E+00      T  T
+     35   0     8  9.3148902766E+00               0.0E+00      T  T
+     40   0     8  9.3148902766E+00               0.0E+00      T  T
+     45   0     8  9.3148902766E+00               0.0E+00      T  T
+     50   0     8  9.3148902766E+00               0.0E+00      T  T
+     55   0     9  9.3148902766E+00               0.0E+00      F  F
+     60   0    13  9.3059113015E+00               0.0E+00      T  T
+     65   0    13  9.3059113015E+00               0.0E+00      T  T
+     70   0    13  9.3059113015E+00               0.0E+00      T  T
+     75   0    13  9.3059113015E+00               0.0E+00      T  T
+ 
+   Iter Phase Ninf   Infeasibility   RGmax    NSB   Step InItr MX OK
+     80   0    13  9.3059113015E+00               0.0E+00      T  T
+     85   0    13  9.3059113015E+00               0.0E+00      T  T
+     90   0    13  9.3059113015E+00               0.0E+00      T  T
+     95   0    13  9.3059113015E+00               0.0E+00      T  T
+    100   0    13  9.3059113015E+00               0.0E+00      T  T
+    105   0    13  9.3059113015E+00               0.0E+00      T  T
+    110   0    13  9.3059113015E+00               0.0E+00      T  T
+    115   0    15  9.3059113015E+00               0.0E+00      T  T
+    120   0    15  6.7236601937E+00               1.0E+00      F  T
+    125   0    15  6.6232240751E+00               1.0E+00      F  T
+ 
+   Iter Phase Ninf   Infeasibility   RGmax    NSB   Step InItr MX OK
+    130   0    15  6.6212340479E+00               0.0E+00      T  T
+    135   0    15  6.6211458532E+00               1.0E+00      F  T
+    140   0    15  6.6211458532E+00               0.0E+00      T  T
+    145   0    15  6.6211323617E+00               0.0E+00      T  T
+    150   0    15  6.6211323617E+00               0.0E+00      T  T
+    155   0    15  6.6211220889E+00               1.0E+00      F  T
+    158   1    12  3.6829467755E+00 2.0E+03    11 1.0E+00    3 T  T
+    159   1     7  2.1499887354E+00 1.4E+01     9 1.0E+00    8 T  T
+    160   1     7  1.4159489353E+00 1.2E+01    12 3.2E-01   12 F  F
+    161   1     3  3.1885951251E-01 1.0E+00     7 1.0E+00    4 T  T
+ 
+ ** Feasible solution. Value of objective =    20160.1925638
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+    162   3        2.0160192564E+04 0.0E+00     3
+ 
+ ** Optimal solution. Reduced gradient less than tolerance.
+ 
+ Root node solved locally optimal.
+   Node  Act. Lev.  Objective  IInf  Best Int.   Best Bound   Gap  (0 secs)
+      0     2   0   20160.1926   5            -   20160.1926         -
+      1     3   1   20160.1926   4            -   20160.1926         -
+      2     4   2   20160.1926   3            -   20160.1926         -
+      3     5   3   20160.1926   2            -   20160.1926         -
+      4     6   4   20160.1926   1            -   20160.1926         -
+*     5     5   5   20160.1926   0   20160.1926   20160.1926  0.000000
+ Integer solution
+ Statistics:
+    Iterations    :               186
+    NLP Seconds   :          0.201999
+    B&B nodes     :                 5
+    MIP solution  :      20160.192564 found in node 5
+    Best possible :      20160.192564
+    Absolute gap  :          0.000000     optca :  0.000001
+    Relative gap  :          0.000000     optcr :  0.000001
+    Model Status  :                 8
+    Solver Status :                 1
+
+ NLP Solver Statistics
+    Total Number of NLP solves  :          7
+    Total Number of NLP failures:          0
+    Details:         conopt
+      # execs             7
+      # failures          0
+ Terminating.
+--- Restarting execution
+--- coolingnetwork_applied_v21_part2_initial.gms(847) 2 Mb
+--- Reading solution for model design_original
+--- Executing after solve: elapsed 0:00:00.883
+--- coolingnetwork_applied_v21_part2_initial.gms(885) 3 Mb
+*** Status: Normal completion
+--- Job coolingnetwork_applied_v21_part2_initial.gms Stop 03/04/17 21:21:40 elapsed 0:00:00.913

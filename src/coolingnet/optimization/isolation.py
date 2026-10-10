@@ -37,7 +37,14 @@ def _run_payload(payload: dict[str, Any]) -> dict[str, Any]:
     settings = SolverSettings(**payload["settings"])
     net = build_network(case.network)
     m = build_model(case, spec, net)
-    sim = simulate_design(case, Design.from_case(case), hot_flow_factor=spec.hot_flow_factor, tower_model=spec.tower_model, network=net, penalty_factor=spec.penalty_factor)
+    sim = simulate_design(
+        case,
+        Design.from_case(case),
+        hot_flow_factor=spec.hot_flow_factor,
+        tower_model=spec.tower_model,
+        network=net,
+        penalty_factor=spec.penalty_factor,
+    )
     initialize_from_simulation(m, sim)
     if payload.get("warm_start") is not None:
         load_warm_start(m, Solution.from_dict(payload["warm_start"]))
@@ -84,7 +91,11 @@ def solve_in_subprocess(case, spec, settings, warm_start=None, *, grace_s: float
             log.warning("%s: solver child exceeded the time limit and was killed", spec.label)
             return None
         if not out_path.exists():
-            log.warning("%s: solver child process ended abnormally (exit code %s)", spec.label, proc.returncode)
+            log.warning(
+                "%s: solver child process ended abnormally (exit code %s)",
+                spec.label,
+                proc.returncode,
+            )
             return None
         result = json.loads(out_path.read_text())
     if not result.get("ok"):

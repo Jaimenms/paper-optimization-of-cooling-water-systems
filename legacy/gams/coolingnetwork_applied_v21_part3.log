@@ -1,0 +1,303 @@
+
+--- Job coolingnetwork_applied_v21_part3.gms Start 03/03/17 22:24:55 24.1.3 r41464 WEX-WEI x86_64/MS Windows
+GAMS 24.1.3   Copyright (C) 1987-2013 GAMS Development. All rights reserved
+Licensee: Andre Luiz Hemerly Costa                       G121101:1009AP-WIN
+          UNIVERSIDADE DO ESTADO DO RIO DE JANEIRO                   DC9993
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- coolingnetwork_applied_v21_part3.gms(13) 2 Mb
+--- .coolingnetwork_applied_v21_part0.gms(676) 3 Mb
+--- coolingnetwork_applied_v21_part3.gms(234) 3 Mb
+--- Starting execution: elapsed 0:00:00.010
+--- coolingnetwork_applied_v21_part3.gms(691) 4 Mb
+--- GDXin=C:\Users\Jaime\Desktop\Artigo applied\Desenv4\gdx/design_original_actual.gdx
+--- coolingnetwork_applied_v21_part3.gms(808) 4 Mb
+--- Generating MINLP model design_revamp
+--- coolingnetwork_applied_v21_part3.gms(810) 7 Mb
+---   1,953 rows  1,207 columns  7,064 non-zeroes
+---   6,026 nl-code  1,942 nl-non-zeroes
+---   349 discrete-columns
+--- coolingnetwork_applied_v21_part3.gms(810) 5 Mb
+--- Executing SBB: elapsed 0:00:00.149
+
+Simple B&B       24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+
+ 1207 columns (349 discrete), 1953 rows, 7064 nonzeros
+CONOPT 3         24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+ 
+ 
+    C O N O P T 3   version 3.15L
+    Copyright (C)   ARKI Consulting and Development A/S
+                    Bagsvaerdvej 246 A
+                    DK-2880 Bagsvaerd, Denmark
+ 
+ 
+   Iter Phase Ninf   Infeasibility   RGmax    NSB   Step InItr MX OK
+      0   0        9.4121533555E+04 (Input point)
+                                Pre-triangular equations:       28
+                                Post-triangular equations:       7
+      1   0        3.5244979875E-10 (After pre-processing)
+      2   0        3.4494783196E-14 (After scaling)
+ 
+ ** Feasible solution. Value of objective =    94121.5335548
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+      3   3        9.4096596999E+04 4.2E+04     7 1.0E+00    3 T  T
+      4   3        9.1910927069E+04 7.7E+09    10 1.0E+00    8 T  T
+      5   3        6.9091850502E+04 7.4E+05    14 5.8E-01   11 T  T
+      6   3        6.5799678481E+04 1.2E+07    20 1.0E+00   12 T  T
+      7   3        5.6259407062E+04 2.7E+06    21 7.1E-01    7 F  F
+      8   3        5.4732291163E+04 1.0E+06    34 1.0E+00    8 T  T
+      9   3        5.2207553244E+04 7.3E+07    27 5.4E-01    4 F  F
+     10   3        5.1584814919E+04 7.4E+07    27 1.0E+00    4 T  T
+     11   3        5.1010833369E+04 7.2E+07    25 3.6E-02    7 T  T
+     12   3        4.8816687486E+04 6.7E+07    52 1.0E+00    5 T  T
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+     13   3        4.4635398617E+04 6.0E+07    47 1.0E+00    8 T  T
+     14   3        3.6618399906E+04 7.5E+06    48 1.0E+00   13 T  T
+     15   3        3.5573161585E+04 2.7E+04    39 5.4E-01   12 F  F
+     16   3        3.5105136511E+04 2.9E+04    38 1.0E+00    6 T  T
+     17   3        3.3722675045E+04 8.2E+03    32 1.0E+00    9 T  T
+     18   3        2.7787854748E+04 8.2E+03    35 5.0E-01   14 F  F
+     19   3        2.7063179860E+04 4.1E+03    28 1.0E+00   11 T  T
+     20   3        2.6162514064E+04 2.7E+07    22 8.8E-02   12 F  F
+     21   3        2.6100472924E+04 1.2E+05    51 1.0E+00   14 T  T
+     22   3        2.6025872570E+04 6.2E+05    45 1.0E+00    6 T  T
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+     23   3        2.5556125251E+04 4.1E+03    39 1.0E+00   10 T  T
+     24   3        1.9169507391E+04 2.0E+03    29 7.8E-01   15 T  T
+     25   3        1.8208142896E+04 3.5E+03    29 1.0E+00   14 T  T
+     26   3        1.4754674948E+04 2.0E+03    22 6.8E-01   15 T  T
+     27   3        1.3369556431E+04 2.1E+04    20 5.4E-01   10 F  F
+     28   3        1.2528909743E+04 2.3E+04    20 1.0E+00    5 T  T
+     29   3        1.1220759716E+04 7.5E+04    25 5.5E-01   10 F  F
+     30   3        1.0728267056E+04 8.1E+03    21 5.1E-01    5 F  F
+     31   3        1.0727503124E+04 1.5E+04    22 2.7E-09      T  T
+     36   3        1.0047463720E+04 1.1E+03    25 1.0E+00    3 T  T
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+     37   3        9.8083153988E+03 3.0E+05    33 6.8E-01    8 F  F
+     38   3        9.7846322006E+03 3.4E+02    33 1.0E+00    9 T  T
+     39   3        9.2113698503E+03 3.5E+02    24 1.0E+00    9 T  T
+     40   3        9.1194642203E+03 3.2E+04    30 1.0E+00   11 T  T
+     41   3        9.0744102943E+03 3.6E+02    28 1.0E+00   14 T  T
+     42   3        9.0446061210E+03 6.4E+01    33 4.7E-01   17 F  F
+     43   3        9.0400482020E+03 6.4E+01    30 1.0E+00   10 T  T
+     44   3        9.0118118478E+03 6.4E+01    24 1.0E+00   11 T  T
+     45   3        9.0103129105E+03 4.2E+01    26 1.0E+00   23 T  T
+     46   3        9.0103097418E+03 4.8E-01    14 5.2E-01   14 F  F
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+     47   3        9.0103069096E+03 4.8E-01    13 1.0E+00    7 T  T
+     48   3        9.0103068673E+03 6.0E-02     6 5.0E-01    5 F  F
+     49   3        9.0103068295E+03 6.0E-02     6 1.0E+00    3 T  T
+     50   3        9.0103068268E+03 1.2E-05     3 5.0E-01    2 F  F
+     51   3        9.0103068253E+03 1.2E-05     3 5.0E-01    2 F  F
+     55   4        9.0103068234E+03 9.7E-08     1
+ 
+ ** Optimal solution. Reduced gradient less than tolerance.
+ 
+ Root node solved locally optimal.
+   Node  Act. Lev.  Objective  IInf  Best Int.   Best Bound   Gap  (1 secs)
+      0     2   0    9010.3068   5            -    9010.3068         -
+      1     3   1    9143.7074   4            -    9010.3068         -
+      2     4   2   12366.1533   3            -    9010.3068         -
+      3     5   3   13468.2717   2            -    9010.3068         -
+      4     6   4   19825.8422   1            -    9010.3068         -
+      5     7   5   84492.9133   6            -    9010.3068         -
+      6     8   6   84492.9133   4            -    9010.3068         -
+      7     9   7   84496.7683   2            -    9010.3068         -
+      8    10   8   84588.2601   4            -    9010.3068         -
+      9    11   9   84588.2601   2            -    9010.3068         -
+*    10    10  10   84590.6833   0   84590.6833    9010.3068  8.388213
+     11    11   1    9143.7074   4   84590.6833    9143.7074  8.251246
+     12    12   2   12366.1533   3   84590.6833    9143.7074  8.251246
+     13    13   2   20148.2028   3   84590.6833    9143.7074  8.251246
+     14    14   2   20148.2028   3   84590.6833   12366.1533  5.840501
+     15    15   3   29691.9889   6   84590.6833   12366.1533  5.840501
+     16    16   3   29691.9889   6   84590.6833   12366.1533  5.840501
+     17    17   3   13468.2717   2   84590.6833   13468.2717  5.280738
+     18    18   4   34341.6141   3   84590.6833   13468.2717  5.280738
+     19    19   4   34141.8274   1   84590.6833   13468.2717  5.280738
+   Node  Act. Lev.  Objective  IInf  Best Int.   Best Bound   Gap  (7 secs)
+     20    20   4   19825.8422   1   84590.6833   19825.8422  3.266688
+     21    19   5      ignored   -   84590.6833   19825.8422  3.266688 (4,7)
+     22    18   5       pruned   -   84590.6833   19825.8422  3.266688
+     23    17   5       pruned   -   84590.6833   20148.2028  3.198423
+     24    16   3       pruned   -   84590.6833   20148.2028  3.198423
+     25    15   3   infeasible   -   84590.6833   20148.2028  3.198423
+     26    14   3       pruned   -   84590.6833   20148.2028  3.198423
+     27    13   3       pruned   -   84590.6833   29691.9889  1.848940
+     28    14   4   74763.2519   3   84590.6833   29691.9889  1.848940
+     29    13   4      ignored   -   84590.6833   29691.9889  1.848940 (4,7)
+     30    12   4      ignored   -   84590.6833   29691.9889  1.848940 (4,7)
+     31    11   4       pruned   -   84590.6833   34141.8274  1.477626
+     32    12   5   84492.9133   6   84590.6833   34141.8274  1.477626
+     33    11   5       pruned   -   84590.6833   34341.6141  1.463212
+     34    10   5       pruned   -   84590.6833   34341.6141  1.463212
+     35     9   5       pruned   -   84590.6833   74763.2519  0.131447
+     36    10   5   84492.9133   4   84590.6833   74763.2519  0.131447
+     37    11   5   84492.9133   4   84590.6833   84492.9133  0.001157
+     38    12   6   84588.2601   4   84590.6833   84492.9133  0.001157
+     39    11   6       pruned   -   84590.6833   84492.9133  0.001157
+   Node  Act. Lev.  Objective  IInf  Best Int.   Best Bound   Gap  (29 secs)
+     40    10   6       pruned   -   84590.6833   84492.9133  0.001157
+     41     9   6      ignored   -   84590.6833   84492.9133  0.001157 (4,7)
+     42    10   6   84588.2601   4   84590.6833   84492.9133  0.001157
+     43     9   6       pruned   -   84590.6833   84492.9133  0.001157
+     44    10   6   84587.7346   8   84590.6833   84492.9133  0.001157
+     45    11   7   84587.7346   8   84590.6833   84496.7683  0.001111
+     46    10   8       pruned   -   84590.6833   84587.7346  0.000035
+ Solution satisfies optcr
+ Statistics:
+    Iterations    :              6167
+    NLP Seconds   :         33.743001
+    B&B nodes     :                46
+    Ignored nodes :                 4
+    MIP solution  :      84590.683279 found in node 10
+    Best possible :      84587.734636
+    Absolute gap  :          2.948643     optca :  0.001000
+    Relative gap  :          0.000035     optcr :  0.001000
+    Model Status  :                 8
+    Solver Status :                 1
+
+ NLP Solver Statistics
+    Total Number of NLP solves  :         48
+    Total Number of NLP failures:          4
+    Details:         conopt
+      # execs            48
+      # failures          4
+ Terminating.
+--- Restarting execution
+--- coolingnetwork_applied_v21_part3.gms(810) 2 Mb
+--- Reading solution for model design_revamp
+--- Executing after solve: elapsed 0:00:34.558
+--- coolingnetwork_applied_v21_part3.gms(844) 3 Mb
+--- Generating MINLP model design_revamp
+--- coolingnetwork_applied_v21_part3.gms(845) 6 Mb
+---   1,953 rows  1,207 columns  7,064 non-zeroes
+---   6,026 nl-code  1,942 nl-non-zeroes
+---   349 discrete-columns
+--- coolingnetwork_applied_v21_part3.gms(845) 3 Mb
+--- Executing SBB: elapsed 0:00:34.618
+
+Simple B&B       24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+
+ 1207 columns (349 discrete), 1953 rows, 7064 nonzeros
+CONOPT 3         24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+ 
+ 
+    C O N O P T 3   version 3.15L
+    Copyright (C)   ARKI Consulting and Development A/S
+                    Bagsvaerdvej 246 A
+                    DK-2880 Bagsvaerd, Denmark
+ 
+ 
+   Iter Phase Ninf   Infeasibility   RGmax    NSB   Step InItr MX OK
+      0   0        1.1338896317E+05 (Input point)
+                                Pre-triangular equations:       28
+                                Post-triangular equations:       7
+      1   0        1.1338896317E+05 (After pre-processing)
+      2   0        8.7499248645E-02 (After scaling)
+ 
+ ** Feasible solution. Value of objective =    197979.646446
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+      4   3        1.9039058751E+05 7.0E+05     9 1.0E+00    2 T  T
+      5   3        1.1653149139E+05 2.4E+06    18 1.0E+00    6 T  T
+      6   3        7.4309922125E+04 3.3E+04    17 5.2E-01   13 F  F
+      7   3        7.2073848379E+04 9.1E+07    25 1.0E+00   13 T  T
+      8   3        7.1971990144E+04 1.5E+07    24 1.2E-01   12 F  F
+ 
+ ** Loss of feasibility while tightening tolerances - Return to phase 0.
+ 
+ ** Feasible solution. Value of objective =    71972.6843935
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+     11   3        7.1971986215E+04 1.9E+06    24 2.2E-13      T  T
+     16   3        7.1909870823E+04 7.7E+04    22 1.0E+00    3 T  T
+     17   3        7.1706707394E+04 1.4E+06    19 1.0E+00    6 T  T
+     18   3        7.0368693648E+04 2.4E+06    19 9.6E-01   11 T  T
+     19   3        2.5184897518E+04 9.6E+06    21 9.5E-01   13 T  T
+     20   3        2.2831794932E+04 3.8E+06    25 6.2E-01   25 F  F
+     21   3        2.2070183915E+04 3.7E+06    23 1.0E+00   11 T  T
+     22   3        2.1420382381E+04 1.1E+04    18 1.0E+00   14 T  T
+     23   3        2.0160203150E+04 8.1E+02    12 1.0E+00   18 T  T
+     26   3        2.0160203152E+04 0.0E+00     0
+ 
+ ** Optimal solution. Reduced gradient less than tolerance.
+ 
+ Root node solved locally optimal.
+   Node  Act. Lev.  Objective  IInf  Best Int.   Best Bound   Gap  (0 secs)
+      0     2   0   20160.2032   5            -   20160.2032         -
+      1     3   1   20355.4152   4            -   20160.2032         -
+      2     4   2   20357.9316   3            -   20160.2032         -
+      3     5   3   16926.5975   2            -   16926.5975         -
+      4     6   4   41485.3112   5            -   16926.5975         -
+      5     7   5   41485.3112   3            -   16926.5975         -
+      6     8   6   41567.5627   5            -   16926.5975         -
+      7     9   7   41567.5627   3            -   16926.5975         -
+      8    10   8   41585.6389   3            -   16926.5975         -
+      9    11   9   41600.9385   5            -   16926.5975         -
+     10    12  10   41600.9385   3            -   16926.5975         -
+     11    13  11   41618.0215   3            -   16926.5975         -
+     12    14  12   41621.0814   3            -   16926.5975         -
+     13    15  13   41622.4609   1            -   16926.5975         -
+     14    16  14  194377.2776   4            -   16926.5975         -
+     15    17  15  194377.2776   2            -   16926.5975         -
+     16    18  16  194639.1247   2            -   16926.5975         -
+     17    19  17  194214.9584   2            -   16926.5975         -
+*    18    15  18  194288.7990   0  194288.7990   16926.5975 10.478314
+     19    16   4   41485.3112   5  194288.7990   20160.2032  8.637244
+   Node  Act. Lev.  Objective  IInf  Best Int.   Best Bound   Gap  (5 secs)
+     20    17   1   20355.4152   4  194288.7990   20355.4152  8.544821
+     21    18   2   12958.7777   3  194288.7990   12958.7777 13.992834
+     22    19   3   18888.5156   2  194288.7990   12958.7777 13.992834
+     23    20   3   18888.5156   2  194288.7990   18888.5156  9.286081
+     24    19   4       pruned   -  194288.7990   18888.5156  9.286081
+     25    20   4  168021.4120   1  194288.7990   18888.5156  9.286081
+     26    19   4       pruned   -  194288.7990   18888.5156  9.286081
+     27    18   4   infeasible   -  194288.7990   20355.4152  8.544821
+     28    19   2   12959.9061   3  194288.7990   12959.9061 13.991528
+     29    20   3   28425.8481   8  194288.7990   12959.9061 13.991528
+     30    21   3   28425.8481   8  194288.7990   20355.4152  8.544821
+     31    22   2   20355.4152   3  194288.7990   20355.4152  8.544821
+     32    23   3   13666.6026   2  194288.7990   13666.6026 13.216320
+     33    24   4   19825.8422   1  194288.7990   13666.6026 13.216320
+     34    25   4   19825.8422   1  194288.7990   19825.8422  8.799775
+     35    24   5       pruned   -  194288.7990   19825.8422  8.799775
+     36    23   5   infeasible   -  194288.7990   19825.8422  8.799775
+     37    22   5       pruned   -  194288.7990   19825.8422  8.799775
+     38    21   5       pruned   -  194288.7990   20355.4152  8.544821
+     39    22   3   13641.6575   6  194288.7990   13641.6575 13.242316
+   Node  Act. Lev.  Objective  IInf  Best Int.   Best Bound   Gap  (11 secs)
+     40    23   4   19825.8422   1  194288.7990   13641.6575 13.242316
+     41    24   4   19825.8422   1  194288.7990   19825.8422  8.799775
+     42    23   5       pruned   -  194288.7990   19825.8422  8.799775
+     43    22   5      ignored   -  194288.7990   19825.8422  8.799775 (4,7)
+     44    21   5       pruned   -  194288.7990   19825.8422  8.799775
+     45    20   5       pruned   -  194288.7990   20357.9316  8.543641
+     46    21   3   16926.5975   2  194288.7990   16926.5975 10.478314
+     47    20   4       pruned   -  194288.7990   16926.5975 10.478314
+     48    21   4   55435.3735   3  194288.7990   28425.8481  5.834934
+     49    22   4  160771.1547   5  194288.7990   28425.8481  5.834934
+     50    21   4       pruned   -  194288.7990   28425.8481  5.834934
+     51    20   4       pruned   -  194288.7990   28425.8481  5.834934
+     52    19   4   infeasible   -  194288.7990   41485.3112  3.683315
+     53    20   6   41760.8702   5  194288.7990   41485.3112  3.683315
+Sending CtrlBreakp signal
+Terminate batch job (Y/N)? 
+forrtl: error (200): program aborting due to control-BREAK event
+Image              PC                Routine            Line        Source             
+conopt3.dll        00007FFE7ADE0B87  Unknown               Unknown  Unknown
+conopt3.dll        00007FFE7ADDD833  Unknown               Unknown  Unknown
+conopt3.dll        00007FFE7ADA3AE6  Unknown               Unknown  Unknown
+conopt3.dll        00007FFE7AD83F31  Unknown               Unknown  Unknown
+conopt3.dll        00007FFE7ADA2EE4  Unknown               Unknown  Unknown
+KERNELBASE.dll     00007FFE989D7E23  Unknown               Unknown  Unknown
+KERNEL32.DLL       00007FFE9B948364  Unknown               Unknown  Unknown
+ntdll.dll          00007FFE9BCB70D1  Unknown               Unknown  Unknown
+err: solver rc 1 
+Exit code = -1073741510

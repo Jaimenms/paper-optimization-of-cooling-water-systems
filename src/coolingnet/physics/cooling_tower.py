@@ -18,7 +18,9 @@ def quadrature_temperature(t_base, t_feed, alpha: float):
     return t_base + (t_feed - t_base) * alpha
 
 
-def air_enthalpy_operating_line(t_m, t_base, water_mass_flow_kg_s, air_flow_kg_s: float, h_atm: float, cp_water: float):
+def air_enthalpy_operating_line(
+    t_m, t_base, water_mass_flow_kg_s, air_flow_kg_s: float, h_atm: float, cp_water: float
+):
     """Air enthalpy from the tower energy balance (Eq. 34): H_m = Hatm + Cp_w m_w (T_m - T_base) / m_air."""
     return h_atm + cp_water * water_mass_flow_kg_s * (t_m - t_base) / air_flow_kg_s
 
@@ -40,7 +42,9 @@ def merkel_integral(
     for alpha in points:
         t_m = quadrature_temperature(t_base, t_feed, alpha)
         h_sat = saturated_air_enthalpy(t_m, fit, ops)
-        h_m = air_enthalpy_operating_line(t_m, t_base, water_mass_flow_kg_s, air_flow_kg_s, h_atm, cp_water)
+        h_m = air_enthalpy_operating_line(
+            t_m, t_base, water_mass_flow_kg_s, air_flow_kg_s, h_atm, cp_water
+        )
         total = total + 1.0 / (h_sat - h_m + regularization)
     return cp_water * (t_feed - t_base) / len(points) * total
 

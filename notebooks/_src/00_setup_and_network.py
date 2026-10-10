@@ -16,7 +16,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from coolingnet import build_network, load_case, paper_case
+from coolingnet import build_network, paper_case
 from coolingnet.config import dump_case, paper_case_path
 from coolingnet.reporting import plot_network
 from coolingnet.reporting import tables as T
@@ -76,17 +76,19 @@ display(T.table_problem_parameters(case))
 #
 # Everything is data. Two ways to change the problem:
 #
-# 1. **Edit a YAML file.** Export the paper configuration and edit it (or run
-#    `coolingnet export-config my_case.yaml` from a shell). The `network.edges` list defines the
+# 1. **Edit a YAML file.** `cases/paper_case.yaml` is an editable copy of the packaged paper
+#    case (`src/coolingnet/data/paper_case.yaml`); export another copy with `dump_case` (or
+#    `coolingnet export-config my_case.yaml` from a shell) and edit it. The `network.edges` list defines the
 #    digraph: add/remove pipes and coolers, change lengths, existing diameters, the pump option,
 #    node ids... `load_case("my_case.yaml")` validates everything (unique ids, catalogue
-#    diameters, cooler data present for every cooler edge, single path per cooler).
+#    diameters, cooler data present for every cooler edge, single path per cooler); from a
+#    shell, `coolingnet validate my_case.yaml` does the same check and prints the circuits.
 # 2. **Programmatically**, with `case.with_updates(...)` / pydantic `model_copy`.
 #
 # Notebook `07_custom_network` walks through a complete example (a sixth cooler is added).
 
 # %%
-my_case_path = Path("../configs/my_case.yaml")
+my_case_path = Path("../cases/my_case.yaml")
 dump_case(case, my_case_path)
 print(my_case_path.read_text()[:1200], "...")
 

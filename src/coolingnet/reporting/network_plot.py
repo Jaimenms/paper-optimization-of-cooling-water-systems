@@ -64,34 +64,127 @@ def plot_network(
             nx_, ny_ = -nx_, -ny_
         if e.kind == "pipe":
             lw = 0.8 + 0.25 * diam[str(e.id)]
-            ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=12, lw=lw, color="0.15", shrinkA=4, shrinkB=4, zorder=2))
+            ax.add_patch(
+                FancyArrowPatch(
+                    (x0, y0),
+                    (x1, y1),
+                    arrowstyle="-|>",
+                    mutation_scale=12,
+                    lw=lw,
+                    color="0.15",
+                    shrinkA=4,
+                    shrinkB=4,
+                    zorder=2,
+                )
+            )
             text = f"{e.id}"
             if show_flows and flows:
                 text += f"\n{flows[str(e.id)]:.1f} kg/s"
-            ax.annotate(text, (xm, ym), textcoords="offset points", xytext=(10 * nx_, 10 * ny_ + 2), ha="center", va="center", fontsize=8, color="0.15")
+            ax.annotate(
+                text,
+                (xm, ym),
+                textcoords="offset points",
+                xytext=(10 * nx_, 10 * ny_ + 2),
+                ha="center",
+                va="center",
+                fontsize=8,
+                color="0.15",
+            )
         elif e.kind == "pump":
-            ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=12, lw=1.2, color="0.15", shrinkA=4, shrinkB=4, zorder=2))
+            ax.add_patch(
+                FancyArrowPatch(
+                    (x0, y0),
+                    (x1, y1),
+                    arrowstyle="-|>",
+                    mutation_scale=12,
+                    lw=1.2,
+                    color="0.15",
+                    shrinkA=4,
+                    shrinkB=4,
+                    zorder=2,
+                )
+            )
             ax.add_patch(Circle((xm, ym), 0.13, fc="white", ec="tab:blue", lw=1.5, zorder=4))
-            ax.annotate(f"{e.id} (pump)", (xm, ym), textcoords="offset points", xytext=(0, -16), ha="center", fontsize=8, color="tab:blue")
+            ax.annotate(
+                f"{e.id} (pump)",
+                (xm, ym),
+                textcoords="offset points",
+                xytext=(0, -16),
+                ha="center",
+                fontsize=8,
+                color="tab:blue",
+            )
         else:
-            ax.add_patch(FancyArrowPatch((x0, y0), (x1, y1), arrowstyle="-|>", mutation_scale=12, lw=1.2, color="0.15", shrinkA=4, shrinkB=4, zorder=2))
+            ax.add_patch(
+                FancyArrowPatch(
+                    (x0, y0),
+                    (x1, y1),
+                    arrowstyle="-|>",
+                    mutation_scale=12,
+                    lw=1.2,
+                    color="0.15",
+                    shrinkA=4,
+                    shrinkB=4,
+                    zorder=2,
+                )
+            )
             ax.add_patch(Circle((xm, ym), 0.22, fc="white", ec="tab:red", lw=1.5, zorder=4))
             ax.plot([xm - 0.22, xm + 0.22], [ym, ym], color="tab:red", lw=1, zorder=5)
             label = e.tag
             if show_flows and flows:
                 label += f"\n{flows[str(e.id)]:.1f} kg/s"
-            ax.annotate(label, (xm, ym), textcoords="offset points", xytext=(18, 0), ha="left", va="center", fontsize=8, color="tab:red")
+            ax.annotate(
+                label,
+                (xm, ym),
+                textcoords="offset points",
+                xytext=(18, 0),
+                ha="left",
+                va="center",
+                fontsize=8,
+                color="tab:red",
+            )
 
     # cooling tower box between the return and the supply nodes
     xs, ys = pos[net.supply_node]
     xr, yr = pos[net.return_node]
     w, h = 0.6, abs(yr - ys) * 0.6
-    ax.add_patch(Rectangle((min(xs, xr) - w - 0.25, min(ys, yr) + abs(yr - ys) * 0.2), w, h, fc="0.95", ec="0.3", zorder=1))
-    ax.annotate("Cooling\ntower", (min(xs, xr) - w / 2 - 0.25, (ys + yr) / 2), ha="center", va="center", fontsize=8)
+    ax.add_patch(
+        Rectangle(
+            (min(xs, xr) - w - 0.25, min(ys, yr) + abs(yr - ys) * 0.2),
+            w,
+            h,
+            fc="0.95",
+            ec="0.3",
+            zorder=1,
+        )
+    )
+    ax.annotate(
+        "Cooling\ntower",
+        (min(xs, xr) - w / 2 - 0.25, (ys + yr) / 2),
+        ha="center",
+        va="center",
+        fontsize=8,
+    )
     ax.plot([min(xs, xr) - 0.25, xs], [ys, ys], color="0.3", lw=1)
     ax.plot([min(xs, xr) - 0.25, xr], [yr, yr], color="0.3", lw=1)
-    ax.annotate("supply", pos[net.supply_node], textcoords="offset points", xytext=(0, -12), ha="center", fontsize=7, color="0.4")
-    ax.annotate("return", pos[net.return_node], textcoords="offset points", xytext=(0, 8), ha="center", fontsize=7, color="0.4")
+    ax.annotate(
+        "supply",
+        pos[net.supply_node],
+        textcoords="offset points",
+        xytext=(0, -12),
+        ha="center",
+        fontsize=7,
+        color="0.4",
+    )
+    ax.annotate(
+        "return",
+        pos[net.return_node],
+        textcoords="offset points",
+        xytext=(0, 8),
+        ha="center",
+        fontsize=7,
+        color="0.4",
+    )
 
     ax.set_aspect("equal")
     ax.autoscale_view()

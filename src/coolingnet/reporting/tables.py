@@ -24,7 +24,10 @@ def table_circuits(case: CaseStudy, network: Network | None = None) -> pd.DataFr
 
 def table_pipes(case: CaseStudy) -> pd.DataFrame:
     """Table 2 - lengths and nominal diameters of the pipe sections."""
-    rows = [{"Pipe section": p.id, "Length (m)": p.length_m, "Nominal diameter (in)": p.diameter_in} for p in case.network.pipes]
+    rows = [
+        {"Pipe section": p.id, "Length (m)": p.length_m, "Nominal diameter (in)": p.diameter_in}
+        for p in case.network.pipes
+    ]
     return pd.DataFrame(rows).set_index("Pipe section")
 
 
@@ -115,7 +118,9 @@ def _he_frame(sol: Solution) -> pd.DataFrame:
     return pd.DataFrame(sol.exchangers).set_index("tag")
 
 
-def table_heat_exchangers_performance(case: CaseStudy, initial: Solution, current: Solution) -> pd.DataFrame:
+def table_heat_exchangers_performance(
+    case: CaseStudy, initial: Solution, current: Solution
+) -> pd.DataFrame:
     """Table 8 - hot stream outlet temperatures and penalties (design, initial, current)."""
     ini, cur = _he_frame(initial), _he_frame(current)
     df = pd.DataFrame(
@@ -127,7 +132,10 @@ def table_heat_exchangers_performance(case: CaseStudy, initial: Solution, curren
         },
         index=ini.index.rename("Heat exchanger"),
     )
-    total = pd.DataFrame({"Current condition penalty (kUSD/y)": [df["Current condition penalty (kUSD/y)"].sum()]}, index=["Total"])
+    total = pd.DataFrame(
+        {"Current condition penalty (kUSD/y)": [df["Current condition penalty (kUSD/y)"].sum()]},
+        index=["Total"],
+    )
     return pd.concat([df, total])
 
 
@@ -173,18 +181,28 @@ def table_unlimited_budget(current: Solution, cases: dict[str, Solution]) -> pd.
             {
                 "Heat exchanger": tag,
                 "Current cooling water flow rate (kg/s)": round(cur.loc[tag, "k_kg_s"], 2),
-                f"Optimal cooling water flow rate (kg/s) {label}": _joined([f.loc[tag, "k_kg_s"] for f in frames.values()]),
-                f"Valve head loss (m) {label}": _joined([f.loc[tag, "valve_head_loss_m"] for f in frames.values()]),
-                f"Penalty (kUSD/y) {label}": _joined([f.loc[tag, "penalty_USD_y"] * KUSD for f in frames.values()]),
+                f"Optimal cooling water flow rate (kg/s) {label}": _joined(
+                    [f.loc[tag, "k_kg_s"] for f in frames.values()]
+                ),
+                f"Valve head loss (m) {label}": _joined(
+                    [f.loc[tag, "valve_head_loss_m"] for f in frames.values()]
+                ),
+                f"Penalty (kUSD/y) {label}": _joined(
+                    [f.loc[tag, "penalty_USD_y"] * KUSD for f in frames.values()]
+                ),
             }
         )
     rows.append(
         {
             "Heat exchanger": "Total",
             "Current cooling water flow rate (kg/s)": round(cur["k_kg_s"].sum(), 2),
-            f"Optimal cooling water flow rate (kg/s) {label}": _joined([f["k_kg_s"].sum() for f in frames.values()]),
+            f"Optimal cooling water flow rate (kg/s) {label}": _joined(
+                [f["k_kg_s"].sum() for f in frames.values()]
+            ),
             f"Valve head loss (m) {label}": "-",
-            f"Penalty (kUSD/y) {label}": _joined([f["penalty_USD_y"].sum() * KUSD for f in frames.values()]),
+            f"Penalty (kUSD/y) {label}": _joined(
+                [f["penalty_USD_y"].sum() * KUSD for f in frames.values()]
+            ),
         }
     )
     return pd.DataFrame(rows).set_index("Heat exchanger")
@@ -200,17 +218,27 @@ def table_budget_cases(cases: dict[str, Solution]) -> pd.DataFrame:
         rows.append(
             {
                 "Heat exchanger": tag,
-                f"Optimal cooling water flow rate (kg/s) {label}": _joined([f.loc[tag, "k_kg_s"] for f in frames.values()]),
-                f"Valve head loss (m) {label}": _joined([f.loc[tag, "valve_head_loss_m"] for f in frames.values()]),
-                f"Penalty (kUSD/y) {label}": _joined([f.loc[tag, "penalty_USD_y"] * KUSD for f in frames.values()]),
+                f"Optimal cooling water flow rate (kg/s) {label}": _joined(
+                    [f.loc[tag, "k_kg_s"] for f in frames.values()]
+                ),
+                f"Valve head loss (m) {label}": _joined(
+                    [f.loc[tag, "valve_head_loss_m"] for f in frames.values()]
+                ),
+                f"Penalty (kUSD/y) {label}": _joined(
+                    [f.loc[tag, "penalty_USD_y"] * KUSD for f in frames.values()]
+                ),
             }
         )
     rows.append(
         {
             "Heat exchanger": "Total",
-            f"Optimal cooling water flow rate (kg/s) {label}": _joined([f["k_kg_s"].sum() for f in frames.values()]),
+            f"Optimal cooling water flow rate (kg/s) {label}": _joined(
+                [f["k_kg_s"].sum() for f in frames.values()]
+            ),
             f"Valve head loss (m) {label}": "-",
-            f"Penalty (kUSD/y) {label}": _joined([f["penalty_USD_y"].sum() * KUSD for f in frames.values()]),
+            f"Penalty (kUSD/y) {label}": _joined(
+                [f["penalty_USD_y"].sum() * KUSD for f in frames.values()]
+            ),
         }
     )
     return pd.DataFrame(rows).set_index("Heat exchanger")
@@ -256,7 +284,9 @@ def table_costs(solutions: dict[str, Solution]) -> pd.DataFrame:
                 "Objective (kUSD/y)": c["total_cost"] * KUSD,
                 "Budget (kUSD/y)": None if c.get("budget") is None else c["budget"] * KUSD,
                 "Pump option": "/".join(s.pump_options().values()),
-                "Pipes changed": sum(1 for e in s.edges if e["kind"] == "pipe" and e.get("changed")) if s.edges else 0,
+                "Pipes changed": sum(1 for e in s.edges if e["kind"] == "pipe" and e.get("changed"))
+                if s.edges
+                else 0,
                 "Solver status": s.report.get("termination"),
             }
         )

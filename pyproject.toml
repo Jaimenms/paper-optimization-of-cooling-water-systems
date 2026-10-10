@@ -6,6 +6,12 @@ readme = "README.md"
 requires-python = ">=3.11,<3.14"
 license = { text = "MIT" }
 authors = [{ name = "Jaime N. M. Souza" }]
+keywords = ["cooling water", "debottlenecking", "MINLP", "cooling tower", "process engineering"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Intended Audience :: Science/Research",
+]
 dependencies = [
     "numpy>=1.26",
     "scipy>=1.11",
@@ -28,10 +34,10 @@ notebooks = [
     "jupyterlab>=4.0",
     "ipykernel>=6.29",
     "ipywidgets>=8.1",
+    "jupytext>=1.16",
     "nbformat>=5.10",
     "nbclient>=0.10",
     "nbconvert>=7.16",
-    "papermill>=2.6",
 ]
 dev = [
     "pytest>=8.0",
@@ -51,14 +57,19 @@ build-backend = "hatchling.build"
 packages = ["src/coolingnet"]
 
 [tool.ruff]
-line-length = 140
+line-length = 100
 target-version = "py311"
-src = ["src", "tests"]
+src = ["src", "tests", "scripts"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "N", "W"]
-per-file-ignores = { "src/coolingnet/cli.py" = ["B008"], "notebooks/_src/*" = ["E402", "B018", "F821"] }
-ignore = ["N803", "N806", "N815", "N802", "E741", "E501"]  # scientific naming (T_w_in, NTU, ...), long formula lines
+# scientific naming (T_w_in, NTU, ...) and long formula / message lines
+# N812: `import paper_reference as REF` (published values) is a convention of the notebooks
+ignore = ["N803", "N806", "N815", "N802", "N812", "E741", "E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/coolingnet/cli.py" = ["B008"]
+"notebooks/_src/*" = ["E402", "B018", "F821"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

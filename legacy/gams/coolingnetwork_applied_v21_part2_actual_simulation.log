@@ -1,0 +1,99 @@
+
+--- Job coolingnetwork_applied_v21_part2_actual_simulation.gms Start 03/06/17 09:42:24 24.1.3 r41464 WEX-WEI x86_64/MS Windows
+GAMS 24.1.3   Copyright (C) 1987-2013 GAMS Development. All rights reserved
+Licensee: Andre Luiz Hemerly Costa                       G121101:1009AP-WIN
+          UNIVERSIDADE DO ESTADO DO RIO DE JANEIRO                   DC9993
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(11) 2 Mb
+--- .coolingnetwork_applied_v21_part0.gms(681) 3 Mb
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(160) 3 Mb
+--- Starting execution: elapsed 0:00:00.009
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(694) 4 Mb
+--- GDXin=C:\Users\Jaime\Desktop\Artigo applied\Desenv4\gdx/design_original_initial.gdx
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(764) 4 Mb
+--- Generating MINLP model sim1
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(766) 6 Mb
+---   102 rows  102 columns  245 non-zeroes
+---   501 nl-code  85 nl-non-zeroes
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(766) 4 Mb
+--- Executing SBB: elapsed 0:00:00.029
+
+Simple B&B       24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+
+ 102 columns (0 discrete), 102 rows, 245 nonzeros
+CONOPT 3         24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+ 
+ 
+    C O N O P T 3   version 3.15L
+    Copyright (C)   ARKI Consulting and Development A/S
+                    Bagsvaerdvej 246 A
+                    DK-2880 Bagsvaerd, Denmark
+ 
+ 
+   Iter Phase Ninf   Infeasibility   RGmax    NSB   Step InItr MX OK
+      0   0        1.5584904398E+01 (Input point)
+                                Pre-triangular equations:       26
+                                Post-triangular equations:      51
+      1   0        1.8202144634E+06 (After pre-processing)
+      2   0        3.1330304378E+00 (After scaling)
+     10   0     0  3.7775781994E-06               1.0E+00      F  T
+ 
+ ** Feasible solution. Value of objective =    0.00000000000
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+     16   3        0.0000000000E+00 0.0E+00     0
+ 
+ ** Optimal solution. There are no superbasic variables.
+ 
+ Root node solved locally optimal.
+ Relaxed problem gives integer solution.
+ Terminating.
+--- Restarting execution
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(766) 2 Mb
+--- Reading solution for model sim1
+--- Executing after solve: elapsed 0:00:00.636
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(818) 3 Mb
+--- Generating MINLP model sim2
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(820) 5 Mb
+---   119 rows  118 columns  324 non-zeroes
+---   654 nl-code  133 nl-non-zeroes
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(820) 3 Mb
+--- Executing SBB: elapsed 0:00:00.647
+
+Simple B&B       24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+
+ 118 columns (0 discrete), 119 rows, 324 nonzeros
+CONOPT 3         24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+ 
+ 
+    C O N O P T 3   version 3.15L
+    Copyright (C)   ARKI Consulting and Development A/S
+                    Bagsvaerdvej 246 A
+                    DK-2880 Bagsvaerd, Denmark
+ 
+ 
+   Iter Phase Ninf   Infeasibility   RGmax    NSB   Step InItr MX OK
+      0   0        3.8336914504E+04 (Input point)
+                                Pre-triangular equations:       16
+                                Post-triangular equations:      41
+      1   0        3.8336914504E+04 (After pre-processing)
+      2   0        4.5353929277E-01 (After scaling)
+ 
+ ** Feasible solution. Value of objective =    0.00000000000
+ 
+   Iter Phase Ninf     Objective     RGmax    NSB   Step InItr MX OK
+      7   3        0.0000000000E+00 0.0E+00     2
+ 
+ ** Optimal solution. Reduced gradient less than tolerance.
+ 
+ Root node solved locally optimal.
+ Relaxed problem gives integer solution.
+ Terminating.
+--- Restarting execution
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(820) 2 Mb
+--- Reading solution for model sim2
+--- Executing after solve: elapsed 0:00:01.222
+--- coolingnetwork_applied_v21_part2_actual_simulation.gms(835) 3 Mb
+*** Status: Normal completion
+--- Job coolingnetwork_applied_v21_part2_actual_simulation.gms Stop 03/06/17 09:42:25 elapsed 0:00:01.227

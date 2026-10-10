@@ -29,7 +29,11 @@ class Design:
         )
 
     def changed_pipes(self, other: Design) -> list[EdgeId]:
-        return [k for k, v in self.pipe_diameters_in.items() if abs(other.pipe_diameters_in[k] - v) > 1e-9]
+        return [
+            k
+            for k, v in self.pipe_diameters_in.items()
+            if abs(other.pipe_diameters_in[k] - v) > 1e-9
+        ]
 
     def changed_pumps(self, other: Design) -> list[EdgeId]:
         return [k for k, v in self.pump_options.items() if other.pump_options[k] != v]

@@ -51,7 +51,9 @@ class SimulationResult:
         return self.operating_cost_USD_y + self.penalty_USD_y
 
 
-def _hydraulic_residuals(q_circ, net: Network, case: CaseStudy, design: Design, valves: dict[int, float], hes):
+def _hydraulic_residuals(
+    q_circ, net: Network, case: CaseStudy, design: Design, valves: dict[int, float], hes
+):
     lam = net.circuit_matrix
     q_edge = lam.T @ q_circ  # Eq. (1)-(2) satisfied by construction
     rho = case.water.density_kg_m3
@@ -66,26 +68,42 @@ def _hydraulic_residuals(q_circ, net: Network, case: CaseStudy, design: Design, 
                 total += pump_head(qk, case.pumps.options[design.pump_options[eid]].coefficients)
             elif e.kind == "pipe":
                 dia = pipes.by_nominal(design.pipe_diameters_in[eid]).inner_m
-                total -= hazen_williams_head_loss(abs(qk), dia, e.length_m, pipes.hazen_williams_c) * np.sign(qk)
+                total -= hazen_williams_head_loss(
+                    abs(qk), dia, e.length_m, pipes.hazen_williams_c
+                ) * np.sign(qk)
             else:
                 h = hes[eid]
-                total -= heat_exchanger_head_loss(rho * qk, h.water_flow_design_kg_s, h.head_loss_design_m, h.head_loss_exponent)
+                total -= heat_exchanger_head_loss(
+                    rho * qk, h.water_flow_design_kg_s, h.head_loss_design_m, h.head_loss_exponent
+                )
         res[c.index - 1] = total
     return res, q_edge
 
 
 def min_driving_force(t_base: float, t_feed: float, k_tot: float, tower, cp_w: float) -> float:
     """Smallest Hsat - H over the quadrature points (must be positive for a physical tower)."""
-    from coolingnet.physics.cooling_tower import air_enthalpy_operating_line, quadrature_temperature, saturated_air_enthalpy
+    from coolingnet.physics.cooling_tower import (
+        air_enthalpy_operating_line,
+        quadrature_temperature,
+        saturated_air_enthalpy,
+    )
 
     worst = np.inf
     for alpha in tower.quadrature_points:
         t_m = quadrature_temperature(t_base, t_feed, alpha)
-        worst = min(worst, saturated_air_enthalpy(t_m, tower.saturation_enthalpy) - air_enthalpy_operating_line(t_m, t_base, k_tot, tower.air_flow_kg_s, tower.atmospheric_air_enthalpy_J_kg, cp_w))
+        worst = min(
+            worst,
+            saturated_air_enthalpy(t_m, tower.saturation_enthalpy)
+            - air_enthalpy_operating_line(
+                t_m, t_base, k_tot, tower.air_flow_kg_s, tower.atmospheric_air_enthalpy_J_kg, cp_w
+            ),
+        )
     return float(worst)
 
 
-def _physical_merkel_root(residual, thermal_state, tower, k_tot: float, cp_w: float, n_grid: int = 200) -> tuple[float, bool]:
+def _physical_merkel_root(
+    residual, thermal_state, tower, k_tot: float, cp_w: float, n_grid: int = 200
+) -> tuple[float, bool]:
     """Basin temperature solving IM = IP with a positive enthalpy driving force everywhere.
 
     The regularized Merkel integral may have spurious roots where the operating line crosses
@@ -100,7 +118,10 @@ def _physical_merkel_root(residual, thermal_state, tower, k_tot: float, cp_w: fl
         if np.isfinite(prev_r) and np.isfinite(r) and prev_r * r < 0:
             root = brentq(residual, t, prev_t, xtol=1e-10)
             _, t_feed = thermal_state(root)
-            if min_driving_force(root, t_feed, k_tot, tower, cp_w) >= tower.min_enthalpy_driving_force_J_kg:
+            if (
+                min_driving_force(root, t_feed, k_tot, tower, cp_w)
+                >= tower.min_enthalpy_driving_force_J_kg
+            ):
                 return float(root), True
         prev_t, prev_r = t, r
     return lo, False
@@ -133,7 +154,12 @@ def simulate_design(
 
     # ---------------------------------------------------------- hydraulics
     q0 = np.array([hes[c.he_edge].water_flow_design_kg_s / rho for c in net.circuits])
-    sol = root(lambda x: _hydraulic_residuals(np.abs(x), net, case, design, valves, hes)[0], q0, method="hybr", tol=1e-12)
+    sol = root(
+        lambda x: _hydraulic_residuals(np.abs(x), net, case, design, valves, hes)[0],
+        q0,
+        method="hybr",
+        tol=1e-12,
+    )
     q_circ = np.abs(sol.x)
     _, q_edge = _hydraulic_residuals(q_circ, net, case, design, valves, hes)
     hyd_ok = sol.success and np.max(np.abs(sol.fun)) < 1e-8
@@ -149,15 +175,37 @@ def simulate_design(
             d = hes[h]
             k_hot = hot_flow_factor * d.hot_flow_design_kg_s
             c_hot = k_hot * d.cp_hot_J_kgK
-            h_w = film_coefficient(d.h_water_design_W_m2K, k_w[h], d.water_flow_design_kg_s, d.water_film_exponent)
-            h_hot = film_coefficient(d.h_hot_design_W_m2K, k_hot, d.hot_flow_design_kg_s, d.hot_film_exponent)
-            u = overall_heat_transfer_coefficient(h_w, h_hot, d.tube_outer_diameter_m, d.tube_inner_diameter_m, d.wall_conductivity_W_mK, d.fouling_m2K_W)
+            h_w = film_coefficient(
+                d.h_water_design_W_m2K, k_w[h], d.water_flow_design_kg_s, d.water_film_exponent
+            )
+            h_hot = film_coefficient(
+                d.h_hot_design_W_m2K, k_hot, d.hot_flow_design_kg_s, d.hot_film_exponent
+            )
+            u = overall_heat_transfer_coefficient(
+                h_w,
+                h_hot,
+                d.tube_outer_diameter_m,
+                d.tube_inner_diameter_m,
+                d.wall_conductivity_W_mK,
+                d.fouling_m2K_W,
+            )
             ntu = u * d.area_m2 / c_hot
             cr = heat_capacity_ratio(c_hot, k_w[h], cp_w)
             p = effectiveness_shell_and_tube(ntu, cr)
             t_hot_out = hot_outlet_temperature(d.hot_inlet_C, t_w_in, p)
             t_w_out = water_outlet_temperature(d.hot_inlet_C, t_w_in, p, cr)
-            out[h] = {"h_w": h_w, "h_hot": h_hot, "U": u, "NTU": ntu, "CR": cr, "P": p, "T_hot_out": t_hot_out, "T_w_out": t_w_out, "C_hot": c_hot, "k_hot": k_hot}
+            out[h] = {
+                "h_w": h_w,
+                "h_hot": h_hot,
+                "U": u,
+                "NTU": ntu,
+                "CR": cr,
+                "P": p,
+                "T_hot_out": t_hot_out,
+                "T_w_out": t_w_out,
+                "C_hot": c_hot,
+                "k_hot": k_hot,
+            }
         t_feed = sum(k_w[h] * out[h]["T_w_out"] for h in he_ids) / k_tot
         return out, t_feed
 
@@ -170,11 +218,25 @@ def simulate_design(
 
         def merkel_residual(t_w_in: float) -> float:
             _, t_feed = thermal_state(t_w_in)
-            im = merkel_integral(t_feed, t_w_in, k_tot, tower.air_flow_kg_s, tower.atmospheric_air_enthalpy_J_kg, cp_w, tower.saturation_enthalpy, tower.quadrature_points, tower.merkel_regularization_J_kg)
-            ip = tower_characteristic(k_tot / tower.air_flow_kg_s, tower.packing_height_m, tower.C_un, tower.n)
+            im = merkel_integral(
+                t_feed,
+                t_w_in,
+                k_tot,
+                tower.air_flow_kg_s,
+                tower.atmospheric_air_enthalpy_J_kg,
+                cp_w,
+                tower.saturation_enthalpy,
+                tower.quadrature_points,
+                tower.merkel_regularization_J_kg,
+            )
+            ip = tower_characteristic(
+                k_tot / tower.air_flow_kg_s, tower.packing_height_m, tower.C_un, tower.n
+            )
             return im - ip
 
-        t_w_in, thermal_ok = _physical_merkel_root(merkel_residual, thermal_state, tower, k_tot, cp_w)
+        t_w_in, thermal_ok = _physical_merkel_root(
+            merkel_residual, thermal_state, tower, k_tot, cp_w
+        )
         states, t_feed = thermal_state(t_w_in)
 
     # ---------------------------------------------------------- economics
@@ -185,13 +247,26 @@ def simulate_design(
         qk = q_edge[net.edge_index(u.id)]
         head = float(pump_head(qk, case.pumps.options[design.pump_options[u.id]].coefficients))
         pump_heads[u.id] = head
-        cope += float(pump_operating_cost(rho * qk, head, econ.gravity_m_s2, case.pumps.efficiency, econ.operating_hours_per_year, econ.energy_cost_USD_kWh))
+        cope += float(
+            pump_operating_cost(
+                rho * qk,
+                head,
+                econ.gravity_m_s2,
+                case.pumps.efficiency,
+                econ.operating_hours_per_year,
+                econ.energy_cost_USD_kWh,
+            )
+        )
 
     exchangers = {}
     cpen = 0.0
     for h in he_ids:
         d = hes[h]
-        pen = d.penalty_factor_USD_per_C_y if penalty_factor is None else (penalty_factor[d.tag] if isinstance(penalty_factor, dict) else penalty_factor)
+        pen = (
+            d.penalty_factor_USD_per_C_y
+            if penalty_factor is None
+            else (penalty_factor[d.tag] if isinstance(penalty_factor, dict) else penalty_factor)
+        )
         s = states[h]
         che = pen * max(0.0, s["T_hot_out"] - d.hot_outlet_spec_C)
         cpen += che
@@ -211,7 +286,11 @@ def simulate_design(
             "duty_W": s["C_hot"] * (d.hot_inlet_C - s["T_hot_out"]),
             "penalty_USD_y": che,
             "valve_head_loss_m": valves.get(c.index, 0.0),
-            "head_loss_m": float(heat_exchanger_head_loss(k_w[h], d.water_flow_design_kg_s, d.head_loss_design_m, d.head_loss_exponent)),
+            "head_loss_m": float(
+                heat_exchanger_head_loss(
+                    k_w[h], d.water_flow_design_kg_s, d.head_loss_design_m, d.head_loss_exponent
+                )
+            ),
         }
 
     velocities = {}
@@ -230,5 +309,8 @@ def simulate_design(
         operating_cost_USD_y=cope,
         penalty_USD_y=cpen,
         converged=bool(hyd_ok and thermal_ok),
-        details={"velocities_m_s": velocities, "hydraulic_residual": float(np.max(np.abs(sol.fun)))},
+        details={
+            "velocities_m_s": velocities,
+            "hydraulic_residual": float(np.max(np.abs(sol.fun))),
+        },
     )

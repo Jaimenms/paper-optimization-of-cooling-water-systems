@@ -1,4 +1,8 @@
-# Model ↔ code map
+# Formulation: equation ↔ code map
+
+Paper: J.N.M. Souza, A.L.L. Levy, A.L.H. Costa, *Optimization of cooling water system hydraulic
+debottlenecking*, Applied Thermal Engineering 128 (2018) 1531–1542,
+doi:10.1016/j.applthermaleng.2017.09.089. Equation numbers refer to the published article.
 
 The optimization model of the paper (Section 2) is implemented in
 [`src/coolingnet/optimization/model.py`](../src/coolingnet/optimization/model.py) with Pyomo.
@@ -34,8 +38,8 @@ Physical and economic relations are shared with the NumPy simulator through
 
 ## Differences between the published text and the original GAMS code
 
-The GAMS sources that generated the published results (`docs/raw/Fonte/Desenv4`) differ from
-the paper text in two places. The configuration file keeps the **code** values because they are
+The GAMS sources that generated the published results (`legacy/gams`, the authors' own
+code) differ from the paper text in two places (formal errata in [`errata.md`](errata.md)). The configuration file keeps the **code** values because they are
 the ones that reproduce the published tables:
 
 * Merkel quadrature abscissae: text `(0.1, 0.4, 0.6, 0.9)`, code `(0.1, 0.4, 0.6, 0.7)`
@@ -95,5 +99,6 @@ Other implementation details that are not spelled out in the paper but are prese
   non-convex MINLP is weak, so it is not the default.
 * Any Pyomo-registered executable (`bonmin`, `couenne`, `scip`, `ipopt`) can also be used.
 
-Like the SBB solutions of the paper, Bonmin's solutions are local optima of a non-convex
-problem; the published results are reproduced to the printed precision.
+Like the SBB solutions of the paper, the solutions of every back-end are local optima of a
+non-convex problem; the reproduction status of each table and figure is in
+[`reproduction.md`](reproduction.md).

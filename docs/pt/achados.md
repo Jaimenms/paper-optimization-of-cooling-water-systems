@@ -1,9 +1,12 @@
 # Três achados da reimplementação que merecem atenção
 
+> Notas de trabalho em português; o estado da reprodução (em inglês) está em
+> [`../reproduction.md`](../reproduction.md) e a errata formal em [`../errata.md`](../errata.md).
+
 Documento interno dos autores. Resume o que a reimplementação em Python (`coolingnet`) revelou
 sobre o artigo *Optimization of cooling water system hydraulic debottlenecking* (Souza, Levy &
 Costa, Applied Thermal Engineering 128 (2018) 1531-1542) e sobre o código GAMS original
-(`docs/raw/Fonte/Desenv4`). Os itens que configuram erros ou omissões no texto publicado estão
+(`legacy/gams`). Os itens que configuram erros ou omissões no texto publicado estão
 detalhados em [`errata.md`](errata.md), com localização no artigo e impacto numérico.
 
 | # | Achado | Natureza | Impacto nos números publicados |
